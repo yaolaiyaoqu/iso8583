@@ -184,7 +184,7 @@ static int lua_iso8583_pack(lua_State *L)
 			int i = lua_tointeger(L, -2);
 			
 			if (i >= 0 && i <= 128) {
-				unsigned int size;
+				size_t size;
 				const unsigned char *data;
 
 				if (!lua_isstring(L, -1)) {
@@ -196,7 +196,7 @@ static int lua_iso8583_pack(lua_State *L)
 
 				data = (const unsigned char *)lua_tolstring(L, -1, &size);
 
-				if (iso8583_set(iso8583u->handle, i, data, size) != ISO8583_OK) {
+				if (iso8583_set(iso8583u->handle, i, data, (unsigned int)size) != ISO8583_OK) {
 					lua_pushnil(L);
 					snprintf(error, BUFSIZ, "data %d error!", i);
 					lua_pushstring(L, error);
@@ -227,7 +227,7 @@ static int lua_iso8583_unpack(lua_State *L)
 	iso8583_userdata *iso8583u;
 	unsigned char *iso8583_data;
 	unsigned int iso8583_size;
-	unsigned int data_len;
+	size_t data_len;
 	char error[BUFSIZ];
 	unsigned int i;
 	int n = lua_gettop(L);
@@ -248,7 +248,7 @@ static int lua_iso8583_unpack(lua_State *L)
 
 	iso8583_data = (unsigned char *)lua_tolstring(L, -1, &data_len);
 
-	iso8583_size = data_len;
+	iso8583_size = (unsigned int)data_len;
 
 	if (iso8583_unpack(iso8583u->handle, iso8583_data, &iso8583_size) != ISO8583_OK) {
 		lua_pushnil(L);
