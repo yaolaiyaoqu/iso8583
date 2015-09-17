@@ -1,7 +1,15 @@
 #ifndef _ISO8583_H_
 #define _ISO8583_H_
 
-#define ISO8583_OK 0
+#define ISO8583_OK         0
+#define ISO8583_EINDEX     1
+#define ISO8583_EHEXTOBIN  2
+#define ISO8583_EBINTOHEX  3
+#define ISO8583_EALIGN     4
+#define ISO8583_ETYPE      5
+#define ISO8583_EMALLOC    6
+#define ISO8583_ESIZE      7
+
 #define ISO8583_FAILED -1
 
 #define ISO8583_L 0
@@ -17,16 +25,16 @@
 #define ISO8583_ERROR_SIZE 128
 
 struct iso8583_field {
-    unsigned int size;
-    char pad;
-    unsigned type:3;    
-    unsigned align:1;
-    unsigned compress:1;
+	unsigned int size;
+	char pad;
+	unsigned type:3;    
+	unsigned align:1;
+	unsigned compress:1;
 };
 
 struct iso8583_data {
-    unsigned int size;
-    unsigned char *data;	
+	unsigned int size;
+	unsigned char *data;
 };
 
 struct iso8583 {

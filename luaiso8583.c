@@ -12,13 +12,13 @@
 
 static void hexdump(const unsigned char *s, int l)
 {
-    int n = 0;
+	int n = 0;
 
-    for (; n < l; ++n) {
-        printf("%02x", s[n]);
-    }
+	for (; n < l; ++n) {
+		printf("%02x", s[n]);
+	}
 
-    printf("\n");
+	printf("\n");
 }
 
 typedef struct iso8583_userdata {
@@ -44,8 +44,8 @@ static int lua_iso8583_new(lua_State *L)
 		return 2;
 	}
 
-    if (lua_istable(L, 1)) {
-    	lua_pushnil(L);  
+	if (lua_istable(L, 1)) {
+		lua_pushnil(L);  
 		while (lua_next(L, 1) != 0)	{
 			if (lua_isnumber(L, -2)) {
 				int i = lua_tointeger(L, -2);
@@ -152,7 +152,7 @@ static int lua_iso8583_new(lua_State *L)
 		}
 	}
 
-    return 1;
+	return 1;
 }
 
 static int lua_iso8583_pack(lua_State *L)
@@ -172,10 +172,10 @@ static int lua_iso8583_pack(lua_State *L)
 	iso8583u = (iso8583_userdata *)luaL_checkudata(L, 1, "iso8583");
 
 	if (!lua_istable(L, 2)) {
-        lua_pushnil(L);
-        lua_pushstring(L, "argument error! data must be table!");
-        return 2;
-    } 
+		lua_pushnil(L);
+		lua_pushstring(L, "argument error! data must be table!");
+		return 2;
+	} 
 
 	lua_pushnil(L);
 	while(lua_next(L, 2) != 0) {
@@ -213,7 +213,7 @@ static int lua_iso8583_pack(lua_State *L)
 	if (iso8583_pack(iso8583u->handle, iso8583_data, &iso8583_maxsize) != ISO8583_OK) {
 		lua_pushnil(L);
 		snprintf(error, BUFSIZ, "pack iso8583 error! %s", iso8583u->handle->error);
-        lua_pushstring(L, error);
+		lua_pushstring(L, error);
 		return 2;
 	}
 
@@ -241,10 +241,10 @@ static int lua_iso8583_unpack(lua_State *L)
 	iso8583u = (iso8583_userdata *)luaL_checkudata(L, 1, "iso8583");
 
 	if (!lua_isstring(L, 2)) {
-        lua_pushnil(L);
-        lua_pushstring(L, "argument error! data must be string!");
-        return 2;
-    }
+		lua_pushnil(L);
+		lua_pushstring(L, "argument error! data must be string!");
+		return 2;
+	}
 
 	iso8583_data = (unsigned char *)lua_tolstring(L, -1, &data_len);
 
@@ -323,7 +323,7 @@ int luaopen_iso8583(lua_State *L)
 
 	set_constant("LEFT",   ISO8583_L);
 	set_constant("RIGHT",  ISO8583_R);
-	set_constant("L",	   ISO8583_L);
+	set_constant("L",      ISO8583_L);
 	set_constant("R",      ISO8583_R);
 
 	set_constant("ZIP",    ISO8583_Z);
