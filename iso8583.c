@@ -1,17 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "iso8583.h"
-
-static void hexdump(unsigned char *s, unsigned int l)
-{
-	int i;
-	for (i = 0; i < l; i++)
-		printf("%02x", s[i]);
-
-	printf("\n");
-}
 
 static struct iso8583_field default_fields[129] = {
 	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 0.   Message Type             n    4						
@@ -53,7 +45,7 @@ static struct iso8583_field default_fields[129] = {
 	{ 104, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_Z },   // 36.  TRACK 3 DATA             z    104  lllvar				 
 	{  12, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 37.  RETR. REF. NUM           an   12						
 	{   6, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 38.  AUTH. ID. RESP           an   6						
-	{   2, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 39.  RESPONSE CODE            an	2						
+	{   2, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 39.  RESPONSE CODE            an   2						
 	{   3, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 40.  SERV. REST'N CODE        an   3						
 	{   8, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 41.  TERMINAL ID              ans  8						
 	{  15, 'F', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 42.  CARD ACC. ID             ans  15						
@@ -141,8 +133,8 @@ static struct iso8583_field default_fields[129] = {
 	{ 999, 'D', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 124. RESERVED FOR PRIVA       ans  999  lllvar				 
 	{ 999, 'D', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 125. RESERVED FOR PRIVA       ans  999  lllvar				 
 	{ 999, 'D', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 126. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },	  // 127. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{   8, 'D', ISO8583_FIX,    ISO8583_L, ISO8583_U }	  // 128. RESERVED FOR PRIVA       ans  999  lllvar				 
+	{ 999, 'D', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 127. RESERVED FOR PRIVA       ans  999  lllvar				 
+	{   8, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U }    // 128. RESERVED FOR PRIVA       ans  999  lllvar				 
 };
 
 static inline unsigned bcd2bin(unsigned char val)
@@ -204,14 +196,14 @@ static inline int correct_size(unsigned int *size, unsigned int type, unsigned i
 		*size = (*size > 9999) ? 9999 : *size;
 		break;
 	default:
-		return ISO8583_ESIZE;
+		return ISO8583_ETYPE;
 	}   
 
 	return ISO8583_OK;
 }
 
 static inline int get_8583size_from_userdata(unsigned int *iso8583_size, unsigned int user_size, 
-								unsigned int type, unsigned int fix_size, unsigned int compress)
+						unsigned int type, unsigned int fix_size, unsigned int compress)
 {
 	switch (type) {
 	case ISO8583_FIX:
@@ -231,8 +223,8 @@ static inline int get_8583size_from_userdata(unsigned int *iso8583_size, unsigne
 }
 
 static inline int str_compress_pad(unsigned char *dst, unsigned int dst_size,
-										unsigned char *src, unsigned int src_size, 
-										unsigned int align, char pad)
+					unsigned char *src, unsigned int src_size, 
+					unsigned int align, char pad)
 {
 	int i;
 
@@ -290,8 +282,8 @@ static inline int str_compress_pad(unsigned char *dst, unsigned int dst_size,
 }
 
 static inline int str_pad(unsigned char *dst, unsigned int dst_size,
-								unsigned char *src, unsigned int src_size, 
-								unsigned int align, char pad)
+				unsigned char *src, unsigned int src_size, 
+				unsigned int align, char pad)
 {
 	int i;
 
@@ -315,8 +307,8 @@ static inline int str_pad(unsigned char *dst, unsigned int dst_size,
 }
 
 static inline int to_fix_8583data(unsigned char *iso8583_data, unsigned int iso8583_size, 
-									unsigned char *user_data, unsigned int user_size, 
-									unsigned int align, char pad, unsigned int compress)
+					unsigned char *user_data, unsigned int user_size, 
+					unsigned int align, char pad, unsigned int compress)
 {
 	if (compress)
 		return str_compress_pad(iso8583_data, iso8583_size, user_data, user_size, align, pad);
@@ -325,8 +317,8 @@ static inline int to_fix_8583data(unsigned char *iso8583_data, unsigned int iso8
 }
 
 static inline int to_var_8583data(unsigned char *iso8583_data, unsigned int iso8583_size,
-							unsigned char *user_data, unsigned int user_size,
-							unsigned int align, char pad, unsigned int compress, unsigned int headlen)
+					unsigned char *user_data, unsigned int user_size,
+					unsigned int align, char pad, unsigned int compress, unsigned int headlen)
 {
 	int i;
 	unsigned int size = user_size;
@@ -341,7 +333,7 @@ static inline int to_var_8583data(unsigned char *iso8583_data, unsigned int iso8
 
 static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsigned char *data, unsigned int *size)
 {
-	unsigned int iso8583_size;
+	unsigned int iso8583_size = 0;
 	struct iso8583_field *field;
 	struct iso8583_data *userdata;
 	int ret;
@@ -392,7 +384,7 @@ static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsign
 }
 
 static inline int get_8583size_from_8583data(unsigned int *size, unsigned char *iso8583_data, unsigned int iso8583_size,
-								unsigned int compress, unsigned int type, unsigned int fix_length)
+							unsigned int compress, unsigned int type, unsigned int fix_length)
 {
 	unsigned int l;
 
@@ -499,8 +491,8 @@ static inline int to_hex_from_left(unsigned char *data, unsigned char *bin, unsi
 }
 
 static inline int to_userdata_fix(unsigned char *user_data, unsigned char *iso8583_data, 
-									unsigned int iso8583_size, unsigned int user_size, 
-									unsigned int compress, unsigned int align)
+					unsigned int iso8583_size, unsigned int user_size, 
+					unsigned int compress, unsigned int align)
 {
 	if (compress) {
 
@@ -541,7 +533,7 @@ static inline int to_userdata(struct iso8583 *handle, unsigned int index, unsign
 
 		if (user_data == NULL) {
 			snprintf(handle->error, ISO8583_ERROR_SIZE, "to_userdata() alloc iso8583_data memory failed!");
-			return ISO8583_FAILED;
+			return ISO8583_EMALLOC;
 		}
 	}
 
@@ -551,7 +543,7 @@ static inline int to_userdata(struct iso8583 *handle, unsigned int index, unsign
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "to_userdata() alloc user_data memory failed!");
 		free(user_data);
 		handle->datas[index] = NULL;
-		return ISO8583_FAILED;
+		return ISO8583_EMALLOC;
 	}
 
 	switch (field->type) {
@@ -608,7 +600,7 @@ int iso8583_define(struct iso8583 *handle, unsigned int index, unsigned int size
 
 	if (!handle) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the ptr of handle is null!");
-		return ISO8583_FAILED;
+		return ISO8583_ENULL;
 	}
 
 	if (check_index(index) != ISO8583_OK) {
@@ -622,12 +614,12 @@ int iso8583_define(struct iso8583 *handle, unsigned int index, unsigned int size
 	}
 
 	if (align != ISO8583_L && align != ISO8583_R) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the align is invalid! align = %ud!", align);
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the align is invalid! align = %u!", align);
 		return ISO8583_EALIGN;
 	}
 
 	if (type != ISO8583_FIX && type != ISO8583_LLVAR && type != ISO8583_LLLVAR) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the type is invalid! type = %ud!", type);
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the type is invalid! type = %u!", type);
 		return ISO8583_ETYPE;
 	}
 
@@ -658,12 +650,12 @@ int iso8583_set(struct iso8583 *handle, unsigned int index, const unsigned char 
 	
 	if (!handle) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_set() argument error! the ptr of handle is null!");
-		return ISO8583_FAILED;
+		return ISO8583_ENULL;
 	}
 
 	if (check_index(index) != ISO8583_OK) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_set() argument error! the index out of range! index = %d!", index);
-		return ISO8583_FAILED;
+		return ISO8583_EINDEX;
 	}
 
 	userdata = handle->datas[index];
@@ -680,8 +672,8 @@ int iso8583_set(struct iso8583 *handle, unsigned int index, const unsigned char 
 	field = handle->fields[index] ? handle->fields[index] : &default_fields[index];
 
 	if (correct_size(&size, field->type, field->size) != ISO8583_OK) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_set() correct size error!");
-		return ISO8583_FAILED;
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_set() correct size error! field type error! type = %u!", field->type);
+		return ISO8583_ESIZE;
 	}
 
 	if (userdata) {
@@ -691,7 +683,7 @@ int iso8583_set(struct iso8583 *handle, unsigned int index, const unsigned char 
 
 		if (userdata == NULL) {
 			snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_set() alloc memory failed!");
-			return ISO8583_FAILED;
+			return ISO8583_EMALLOC;
 		}
 	}
 		
@@ -701,7 +693,7 @@ int iso8583_set(struct iso8583 *handle, unsigned int index, const unsigned char 
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_set() alloc memory failed!");
 		free(userdata);
 		handle->datas[index] = NULL;
-		return ISO8583_FAILED;
+		return ISO8583_EMALLOC;
 	}
 
 	memcpy(userdata->data, data, size);
@@ -718,12 +710,12 @@ int iso8583_get(struct iso8583 *handle, unsigned int index, const unsigned char 
 
 	if (!handle) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_get() argument error! the ptr of handle is null!");
-		return ISO8583_FAILED;
+		return ISO8583_ENULL;
 	}
 
 	if (check_index(index) != ISO8583_OK) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_get() argument error! the index out of range! index = %d!", index);
-		return ISO8583_FAILED;
+		return ISO8583_EINDEX;
 	}
 
 	userdata = handle->datas[index];
@@ -743,12 +735,12 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 
 	if (!handle) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_pack() argument error! the ptr of handle is null!");
-		return ISO8583_FAILED;
+		return ISO8583_ENULL;
 	}
 
 	if (handle->datas[0] == NULL) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_pack() error! the data of field 0 must be exist!");
-		return ISO8583_FAILED;
+		return ISO8583_EFIELD0;
 	}
 
 	left_size = *size;
@@ -763,7 +755,7 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	if (left_size < 8) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
 			"iso8583_pack() error! no enough size to pack bitmap! left_size = %u, left_size < 8!", left_size);
-		return ISO8583_FAILED;
+		return ISO8583_ESIZE;
 	}
 
 	bitmap = data + packed_size;
@@ -779,7 +771,7 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	if (left_size < bitmap_n) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
 			"iso8583_pack() error! no enough size to pack bitmap! left_size = %u, bitmap_n = %u!", left_size, bitmap_n);
-		return ISO8583_FAILED;
+		return ISO8583_ESIZE;
 	}
 
 	packed_size += bitmap_n;	
@@ -807,11 +799,10 @@ int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *si
 	unsigned int unpacked_size, left_size;
 	unsigned char *bitmap;
 	unsigned int bitmap_n = 64;			  /* default */
-	unsigned int bit;
 
 	if (!handle) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_unpack() argument error! the ptr of handle is null!");
-		return ISO8583_FAILED;
+		return ISO8583_ENULL;
 	}
 
 	iso8583_clear_datas(handle);
@@ -835,10 +826,10 @@ int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *si
 
 	if (bitmap_get_bit(bitmap, 1)) {
 		bitmap_n = 16;	
-		iso8583_set(handle, 1, "1", 1);
+		iso8583_set(handle, 1, (unsigned char *)"1", 1);
 	} else {
 		bitmap_n = 8;
-		iso8583_set(handle, 1, "0", 1);
+		iso8583_set(handle, 1, (unsigned char *)"0", 1);
 	}
 
 	if (left_size < bitmap_n) {

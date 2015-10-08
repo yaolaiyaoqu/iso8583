@@ -1,7 +1,7 @@
 CC = gcc
 LD = gcc
 
-CFLAGS = -g -fPIC
+CFLAGS = -O3 -Wall -fPIC
 LDFLAGS = -shared -llua
 
 TARGET = iso8583.so

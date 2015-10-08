@@ -10,16 +10,13 @@
 
 #define ISO8583_MAXSIZE 81920
 
-static void hexdump(const unsigned char *s, int l)
-{
-	int n = 0;
+#if LUA_VERSION_NUM <= 501 
 
-	for (; n < l; ++n) {
-		printf("%02x", s[n]);
-	}
+#define lua_rawlen(L, index)   lua_objlen(L, index)
+#define luaL_newlib(L, l)      luaL_register(L, NULL, l)
 
-	printf("\n");
-}
+#endif
+
 
 typedef struct iso8583_userdata {
 	struct iso8583 *handle;
@@ -124,7 +121,7 @@ static int lua_iso8583_new(lua_State *L)
 						// get pad;
 						lua_getfield(L, -1, "pad");
 
-						if (!lua_isstring(L, -1) || !lua_objlen(L, -1)) {
+						if (!lua_isstring(L, -1) || !lua_rawlen(L, -1)) {
 							lua_pushnil(L);
 							snprintf(error, BUFSIZ, "field %d error! the pad is invalid!", i);
 							lua_pushstring(L, error);
@@ -296,28 +293,26 @@ static int lua_iso8583_close(lua_State *L)
 }
 
 static const struct luaL_Reg iso8583lib_f[] = {
-	{"new", lua_iso8583_new},
-	{NULL, NULL}
+	{ "new",    lua_iso8583_new    },
+	{ NULL, NULL}
 };
 
 static const struct luaL_Reg iso8583lib_m[] = {
-	{"Pack", lua_iso8583_pack},
-	{"Unpack", lua_iso8583_unpack},
-	{"close", lua_iso8583_close},
-	{"__gc", lua_iso8583_close},
-	{NULL, NULL}
+	{ "Pack",   lua_iso8583_pack   },
+	{ "Unpack", lua_iso8583_unpack },
+	{ "close",  lua_iso8583_close  },
+	{ "__gc",   lua_iso8583_close  },
+	{ NULL, NULL}
 };
 
 int luaopen_iso8583(lua_State *L)
 {
-
 	luaL_newmetatable(L, "iso8583");
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
 
-	luaL_register(L, NULL, iso8583lib_m);
-
-	luaL_register(L, "iso8583", iso8583lib_f);
+	luaL_newlib(L, iso8583lib_m);
+	luaL_newlib(L, iso8583lib_f);
 
 #define set_constant(name, value) lua_pushstring(L, name); lua_pushinteger(L, value); lua_settable(L, -3);
 
@@ -337,3 +332,4 @@ int luaopen_iso8583(lua_State *L)
 
 	return 1;
 }
+

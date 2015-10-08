@@ -9,6 +9,8 @@
 #define ISO8583_ETYPE      5
 #define ISO8583_EMALLOC    6
 #define ISO8583_ESIZE      7
+#define ISO8583_ENULL      8
+#define ISO8583_EFIELD0    9
 
 #define ISO8583_FAILED -1
 
