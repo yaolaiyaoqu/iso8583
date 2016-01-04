@@ -519,8 +519,8 @@ static inline int to_userdata(struct iso8583 *handle, unsigned int index, unsign
 
 	if (ret != ISO8583_OK) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
-			"to_userdata() error! get_size_from_8583data error! compress = %u, type = %u, field->size = %u, size = %u!", 
-			field->compress, field->type, field->size, *size);
+			"to_userdata() error! get_size_from_8583data error! index = %u, compress = %u, type = %u, field->size = %u, size = %u!", 
+			index, field->compress, field->type, field->size, *size);
 		return ret;
 	}
 
@@ -762,9 +762,11 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 
 	if (handle->datas[1] != NULL && handle->datas[1]->data[0] == '1') {
 		bitmap_n = 16;	
+		memset(bitmap, 0, bitmap_n);
 		bitmap_set_bit(bitmap, 1, 1);
 	} else {
 		bitmap_n = 8;
+		memset(bitmap, 0, bitmap_n);
 		bitmap_set_bit(bitmap, 1, 0);
 	}
 
