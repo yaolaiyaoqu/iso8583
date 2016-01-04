@@ -12,11 +12,11 @@
 
 #if LUA_VERSION_NUM <= 501 
 
-#define lua_rawlen(L, index)   lua_objlen(L, index)
-#define luaL_newlib(L, l)      luaL_register(L, NULL, l)
+#define lua_rawlen(L, index)      lua_objlen(L, index)
+#define luaL_setfuncs(L, l, nup)  luaL_register(L, NULL, l)
+#define luaL_newlib(L, l)         lua_newtable(L); luaL_register(L, NULL, l);
 
 #endif
-
 
 typedef struct iso8583_userdata {
 	struct iso8583 *handle;
@@ -174,6 +174,8 @@ static int lua_iso8583_pack(lua_State *L)
 		return 2;
 	} 
 
+	iso8583_clear_datas(iso8583u->handle);
+
 	lua_pushnil(L);
 	while(lua_next(L, 2) != 0) {
 
@@ -243,6 +245,8 @@ static int lua_iso8583_unpack(lua_State *L)
 		return 2;
 	}
 
+	iso8583_clear_datas(iso8583u->handle);
+
 	iso8583_data = (unsigned char *)lua_tolstring(L, -1, &data_len);
 
 	iso8583_size = (unsigned int)data_len;
@@ -311,8 +315,8 @@ int luaopen_iso8583(lua_State *L)
 	lua_pushvalue(L, -1);
 	lua_setfield(L, -2, "__index");
 
-	luaL_newlib(L, iso8583lib_m);
-	luaL_newlib(L, iso8583lib_f);
+	luaL_setfuncs(L, iso8583lib_m, 0);
+	luaL_setfuncs(L, iso8583lib_f, 0);
 
 #define set_constant(name, value) lua_pushstring(L, name); lua_pushinteger(L, value); lua_settable(L, -3);
 
