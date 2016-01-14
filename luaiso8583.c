@@ -22,12 +22,91 @@ typedef struct iso8583_userdata {
 	struct iso8583 *handle;
 } iso8583_userdata;
 
+static int check_size_define(lua_State *L, int index, int *size)
+{
+	lua_getfield(L, -1, "size");
+	
+	if (!lua_isnumber(L, -1)) {
+		lua_pushnil(L);
+		lua_pushfstring(L, "field %d error! the size is not a number!", index);
+		return 0;
+	}
+
+	*size = lua_tointeger(L, -1);
+	lua_pop(L, 1);
+
+	return 1;
+}
+
+
+static int check_type_define(lua_State *L, int index, int *type)
+{
+	lua_getfield(L, -1, "type");
+
+	if (!lua_isnumber(L, -1)) {
+		lua_pushnil(L);
+		lua_pushfstring(L, "field %d error! the type is invalid!", index);
+		return 0;
+	}
+	
+	*type = lua_tointeger(L, -1);
+	lua_pop(L, 1);
+
+	return 1;
+}
+
+static int check_align_define(lua_State *L, int index, int *align)
+{
+	lua_getfield(L, -1, "align");
+
+	if (!lua_isnumber(L, -1)) {
+		lua_pushnil(L);
+		lua_pushfstring(L, "field %d error! the align is invalid!", index);
+		return 0;
+	}
+	
+	*align = lua_tointeger(L, -1);
+	lua_pop(L, 1);
+
+	return 1;	
+}
+
+static int check_compress_define(lua_State *L, int index, int *compress)
+{
+	lua_getfield(L, -1, "compress");
+
+	if (!lua_isnumber(L, -1)) {
+		lua_pushnil(L);
+		lua_pushfstring(L, "field %d error! the compress is invalid!", index);
+		return 0;
+	}
+	
+	*compress = lua_tointeger(L, -1);
+	lua_pop(L, 1);
+
+	return 1;
+}
+
+static int check_pad_define(lua_State *L, int index, char *pad)
+{
+	lua_getfield(L, -1, "pad");
+
+	if (!lua_isstring(L, -1) || !lua_rawlen(L, -1)) {
+		lua_pushnil(L);
+		lua_pushfstring(L, "field %d error! the pad is invalid!", index);
+		return 0;
+	}
+	
+	*pad = *lua_tostring(L, -1);
+	lua_pop(L, 1);
+
+	return 1;
+}
+
 static int lua_iso8583_new(lua_State *L)
 {
 	struct iso8583 *iso8583h;
 	iso8583_userdata *iso8583u = (iso8583_userdata *)lua_newuserdata(L, sizeof(iso8583_userdata));
-	char error[BUFSIZ];
-
 	iso8583u->handle = NULL;
 
 	luaL_getmetatable(L, "iso8583");
@@ -41,112 +120,53 @@ static int lua_iso8583_new(lua_State *L)
 		return 2;
 	}
 
-	if (lua_istable(L, 1)) {
-		lua_pushnil(L);  
-		while (lua_next(L, 1) != 0)	{
-			if (lua_isnumber(L, -2)) {
-				int i = lua_tointeger(L, -2);
+	if (!lua_istable(L, 1))
+		return 1;
 
-				if (i >= 0 && i <= 128) {
-					if (lua_istable(L, -1)) {
-						int size;
-						int type;
-						int align;
-						int compress;
-						char pad;
-						
-						// get size
-						lua_getfield(L, -1, "size");
-						
-						if (!lua_isnumber(L, -1)) {
-							lua_pushnil(L);
-							snprintf(error, BUFSIZ, "field %d error! the size is not a number!", i);
-							lua_pushstring(L, error);
-							return 2;
-						}
+	lua_pushnil(L);  
 
-						size = lua_tointeger(L, -1);
+	while (lua_next(L, 1) != 0)	{
 
-						if (size < 0) {
-							lua_pushnil(L);
-							snprintf(error, BUFSIZ, "field %d error! the size is little then 0! size = %d", i, size);
-							lua_pushstring(L, error);
-							return 2;
-						}
-
-						lua_pop(L, 1);
-
-						// get type
-						lua_getfield(L, -1, "type");
-
-						if (!lua_isnumber(L, -1)) {
-							lua_pushnil(L);
-							snprintf(error, BUFSIZ, "field %d error! the type is invalid!", i);
-							lua_pushstring(L, error);
-							return 2;
-						}
-						
-						type = lua_tointeger(L, -1);
-
-						lua_pop(L, 1);
-
-						// get align;
-						lua_getfield(L, -1, "align");
-
-						if (!lua_isnumber(L, -1)) {
-							lua_pushnil(L);
-							snprintf(error, BUFSIZ, "field %d error! the align is invalid!", i);
-							lua_pushstring(L, error);
-							return 2;
-						}
-						
-						align = lua_tointeger(L, -1);
-
-						lua_pop(L, 1);
-
-						// get compress;
-						lua_getfield(L, -1, "compress");
-
-						if (!lua_isnumber(L, -1)) {
-							lua_pushnil(L);
-							snprintf(error, BUFSIZ, "field %d error! the compress is invalid!", i);
-							lua_pushstring(L, error);
-							return 2;
-						}
-						
-						compress = lua_tointeger(L, -1);
-
-						lua_pop(L, 1);
-
-						// get pad;
-						lua_getfield(L, -1, "pad");
-
-						if (!lua_isstring(L, -1) || !lua_rawlen(L, -1)) {
-							lua_pushnil(L);
-							snprintf(error, BUFSIZ, "field %d error! the pad is invalid!", i);
-							lua_pushstring(L, error);
-							return 2;
-						}
-						
-						pad = *lua_tostring(L, -1);
-
-						lua_pop(L, 1);
-
-						// define field
-						if (iso8583_define(iso8583h, i, (unsigned int)size, pad, (unsigned int)type, 
-											(unsigned int)align, (unsigned int)compress) != ISO8583_OK) {
-							lua_pushnil(L);
-							snprintf(error, BUFSIZ, "field %u error! the field is invalid! size = %u, "
-													"pad = %c, type = %u, align = %u, compress = %u!", 
-										i, size, pad, type, align, compress);
-							lua_pushstring(L, error);
-							return 2;
-						}
-					}
-				}
-			}
+		if (!lua_isnumber(L, -2)) {
 			lua_pop(L, 1);
+			continue;
 		}
+
+		int i = lua_tointeger(L, -2);
+
+		if (i >= 0 && i <= 128 && lua_istable(L, -1)) {
+			int size, type, align, compress;
+			char pad;
+
+
+			if (!check_size_define(L, i, &size)) 
+				return 2;
+
+			if (!check_type_define(L, i, &type))
+				return 2;
+
+			if (!check_align_define(L, i, &align))
+				return 2;
+
+			if (!check_compress_define(L, i, &compress))
+				return 2;
+
+			if (!check_pad_define(L, i, &pad))
+				return 2;
+
+			// define field
+			if (iso8583_define(iso8583h, i, (unsigned int)size, pad, (unsigned int)type, 
+					(unsigned int)align, (unsigned int)compress) != ISO8583_OK) {
+				lua_pushnil(L);
+				lua_pushfstring(L, "field %u error! the field is invalid! size = %u, "
+						"pad = %c, type = %u, align = %u, compress = %u!",
+						i, size, pad, type, align, compress);
+				
+				return 2;
+			}
+		}
+
+		lua_pop(L, 1);
 	}
 
 	return 1;
@@ -155,14 +175,13 @@ static int lua_iso8583_new(lua_State *L)
 static int lua_iso8583_pack(lua_State *L)
 {
 	iso8583_userdata *iso8583u;
-	char error[BUFSIZ];
 	int n = lua_gettop(L);
 	unsigned int iso8583_maxsize = ISO8583_MAXSIZE;
 	unsigned char iso8583_data[ISO8583_MAXSIZE];
 
 	if (n < 2) {
 		lua_pushnil(L);
-		lua_pushstring(L, "arguments error! too small!");
+		lua_pushstring(L, "Arguments error! The data must be exist!");
 		return 2;
 	}
 
@@ -170,37 +189,39 @@ static int lua_iso8583_pack(lua_State *L)
 
 	if (!lua_istable(L, 2)) {
 		lua_pushnil(L);
-		lua_pushstring(L, "argument error! data must be table!");
+		lua_pushstring(L, "Argument error! The data must be table!");
 		return 2;
 	} 
 
 	iso8583_clear_datas(iso8583u->handle);
 
 	lua_pushnil(L);
+
 	while(lua_next(L, 2) != 0) {
 
-		if (lua_isnumber(L, -2)) {
-			int i = lua_tointeger(L, -2);
-			
-			if (i >= 0 && i <= 128) {
-				size_t size;
-				const unsigned char *data;
+		if (!lua_isnumber(L, -2)) {
+			lua_pop(L, 1);
+			continue;
+		}
 
-				if (!lua_isstring(L, -1)) {
-					lua_pushnil(L);
-					snprintf(error, BUFSIZ, "data %d error! is not a string!", i);
-					lua_pushstring(L, error);
-					return 2;
-				}
+		int i = lua_tointeger(L, -2);
+		
+		if (i >= 0 && i <= 128) {
+			size_t size;
+			const unsigned char *data;
 
-				data = (const unsigned char *)lua_tolstring(L, -1, &size);
+			if (!lua_isstring(L, -1)) {
+				lua_pushnil(L);
+				lua_pushfstring(L, "data %d error! is not a string!", i);
+				return 2;
+			}
 
-				if (iso8583_set(iso8583u->handle, i, data, (unsigned int)size) != ISO8583_OK) {
-					lua_pushnil(L);
-					snprintf(error, BUFSIZ, "data %d error!", i);
-					lua_pushstring(L, error);
-					return 2;
-				}
+			data = (const unsigned char *)lua_tolstring(L, -1, &size);
+
+			if (iso8583_set(iso8583u->handle, i, data, (unsigned int)size) != ISO8583_OK) {
+				lua_pushnil(L);
+				lua_pushfstring(L, "data %d error!", i);
+				return 2;
 			}
 		}
 
@@ -211,8 +232,7 @@ static int lua_iso8583_pack(lua_State *L)
 
 	if (iso8583_pack(iso8583u->handle, iso8583_data, &iso8583_maxsize) != ISO8583_OK) {
 		lua_pushnil(L);
-		snprintf(error, BUFSIZ, "pack iso8583 error! %s", iso8583u->handle->error);
-		lua_pushstring(L, error);
+		lua_pushfstring(L, "Pack iso8583 error! %s", iso8583u->handle->error);
 		return 2;
 	}
 
@@ -227,7 +247,6 @@ static int lua_iso8583_unpack(lua_State *L)
 	unsigned char *iso8583_data;
 	unsigned int iso8583_size;
 	size_t data_len;
-	char error[BUFSIZ];
 	unsigned int i;
 	int n = lua_gettop(L);
 
@@ -246,15 +265,12 @@ static int lua_iso8583_unpack(lua_State *L)
 	}
 
 	iso8583_clear_datas(iso8583u->handle);
-
 	iso8583_data = (unsigned char *)lua_tolstring(L, -1, &data_len);
-
 	iso8583_size = (unsigned int)data_len;
 
 	if (iso8583_unpack(iso8583u->handle, iso8583_data, &iso8583_size) != ISO8583_OK) {
 		lua_pushnil(L);
-		snprintf(error, BUFSIZ, "unpack iso8583 error! %s", iso8583u->handle->error);
-		lua_pushstring(L, error);
+		lua_pushfstring(L, "unpack iso8583 error! %s", iso8583u->handle->error);
 		return 2;
 	}
 
@@ -266,15 +282,13 @@ static int lua_iso8583_unpack(lua_State *L)
 
 		if (iso8583_get(iso8583u->handle, i, &user_data, &user_size) != ISO8583_OK) {
 			lua_pushnil(L);
-			snprintf(error, BUFSIZ, "unpack iso8583 error! %s", iso8583u->handle->error);
-			lua_pushstring(L, error);
+			lua_pushfstring(L, "unpack iso8583 error! %s", iso8583u->handle->error);
 			return 2;
 		}
 
 		if (user_data && user_size) {
 			lua_pushinteger(L, (int)i);
 			lua_pushlstring(L, (const char *)user_data, user_size);
-
 			lua_settable (L, -3);
 		}
 	}
