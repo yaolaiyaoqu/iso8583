@@ -138,7 +138,6 @@ static int lua_iso8583_new(lua_State *L)
 			int size, type, align, compress;
 			char pad;
 
-
 			if (!check_size_define(L, i, &size)) 
 				return 2;
 
@@ -161,7 +160,6 @@ static int lua_iso8583_new(lua_State *L)
 				lua_pushfstring(L, "field %u error! the field is invalid! size = %u, "
 						"pad = %c, type = %u, align = %u, compress = %u!",
 						i, size, pad, type, align, compress);
-				
 				return 2;
 			}
 		}

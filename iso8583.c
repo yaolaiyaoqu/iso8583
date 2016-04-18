@@ -5,6 +5,43 @@
 
 #include "iso8583.h"
 
+#define CHK_HANDLE_PTR(handle) do { if (!handle) return ISO8583_ENULL; } while (0)
+
+#define CHK_INDEX(handle, index) do { \
+	if (index > 128) { \
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "function %s: argument error! the index out of range! index = %u!", __func__, index); \
+		return ISO8583_EINDEX; \
+	} \
+} while (0)
+
+#define CHK_TYPE(handle, type) do { \
+	if (type != ISO8583_FIX && type != ISO8583_LLVAR && type != ISO8583_LLLVAR) { \
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "function %s: argument error! the type is invalid! type = %u!", __func__, type); \
+		return ISO8583_ETYPE; \
+	} \
+} while (0)
+
+#define CHK_ALIGN(handle, align) do { \
+	if (align != ISO8583_L && align != ISO8583_R) { \
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "function %s: argument error! the align is invalid! align = %u!", __func__, align); \
+		return ISO8583_EALIGN; \
+	} \
+} while (0)
+
+#define CHK_FIELD0(handle) do { \
+	if (handle->datas[0] == NULL) { \
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "function %s: field0 error! the data of field 0 must be exist!", __func__); \
+		return ISO8583_EFIELD0; \
+	} \
+} while (0) 
+
+#define CHK_PAD(handle, pad, compress) do {\
+	if (compress && (hex_to_bin(pad) == -1)) { \
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "function %s: argument error! the pad char is not in 1-9/a-f/A-F! pad = %x!", __func__, pad); \
+		return ISO8583_EHEXTOBIN; \
+	} \
+} while (0)
+
 static struct iso8583_field default_fields[129] = {
 	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 0.   Message Type             n    4						
 	{   1, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 1.   BIT MAP EXTENDED         b    1						
@@ -165,22 +202,6 @@ static inline char bin_to_hex(int n)
 		return -1;
 
 	return hex[n];
-}
-
-static inline int check_index(unsigned int index)
-{
-	if (index > 128)
-		return ISO8583_EINDEX;
-	
-	return ISO8583_OK;
-}
-
-static inline int check_pad(char pad, unsigned int compress)
-{
-	if (compress && (hex_to_bin(pad) == -1))
-			return ISO8583_EHEXTOBIN;
-			
-	return ISO8583_OK;
 }
 
 static inline int correct_size(unsigned int *size, unsigned int type, unsigned int fix_size)
@@ -356,7 +377,7 @@ static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsign
 
 	if (iso8583_size > *size) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
-					"to_8583data() error! not enough size! index = %d, size = %u, iso8583_size = %u!", index, *size, iso8583_size);
+			"to_8583data() error! not enough size! index = %d, size = %u, iso8583_size = %u!", index, *size, iso8583_size);
 		return ISO8583_ESIZE;
 	}
 
@@ -374,7 +395,7 @@ static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsign
 
 	if (ret != ISO8583_OK) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
-					"to_8583data() error! convert to 8583data failed! index = %d, size = %u, iso8583_size = %u!", index, *size, iso8583_size);
+			"to_8583data() error! convert to 8583data failed! index = %d, size = %u, iso8583_size = %u!", index, *size, iso8583_size);
 		return ret;
 	}
 
@@ -495,12 +516,10 @@ static inline int to_userdata_fix(unsigned char *user_data, unsigned char *iso85
 					unsigned int compress, unsigned int align)
 {
 	if (compress) {
-
 		if (align == ISO8583_L)
 			to_hex_from_left(user_data, iso8583_data, user_size);
 		else
 			to_hex_from_right(user_data + user_size, iso8583_data + iso8583_size, user_size);	
-
 	} else {
 		memcpy(user_data, iso8583_data, user_size);
 	}
@@ -513,9 +532,8 @@ static inline int to_userdata(struct iso8583 *handle, unsigned int index, unsign
 	struct iso8583_field *field = handle->fields[index] ? handle->fields[index] : &default_fields[index];		
 	struct iso8583_data *user_data;
 	unsigned int iso8583_size, user_size;
-	int ret;
 
-	ret = get_size_from_8583data(&iso8583_size, &user_size, data, *size, field->compress, field->type, field->size);
+	int ret = get_size_from_8583data(&iso8583_size, &user_size, data, *size, field->compress, field->type, field->size);
 
 	if (ret != ISO8583_OK) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
@@ -598,30 +616,11 @@ int iso8583_define(struct iso8583 *handle, unsigned int index, unsigned int size
 {
 	struct iso8583_field *field;
 
-	if (!handle) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the ptr of handle is null!");
-		return ISO8583_ENULL;
-	}
-
-	if (check_index(index) != ISO8583_OK) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the index out of range! index = %d!", index);
-		return ISO8583_EINDEX;
-	}
-
-	if (check_pad(pad, compress) != ISO8583_OK)	{
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the pad can't be compressed! pad = %x!", pad);
-		return ISO8583_EHEXTOBIN;
-	}
-
-	if (align != ISO8583_L && align != ISO8583_R) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the align is invalid! align = %u!", align);
-		return ISO8583_EALIGN;
-	}
-
-	if (type != ISO8583_FIX && type != ISO8583_LLVAR && type != ISO8583_LLLVAR) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! the type is invalid! type = %u!", type);
-		return ISO8583_ETYPE;
-	}
+	CHK_HANDLE_PTR(handle);
+	CHK_INDEX(handle, index);
+	CHK_TYPE(handle, type);
+	CHK_ALIGN(handle, align);
+	CHK_PAD(handle, pad, compress);
 
 	field = handle->fields[index];
 
@@ -647,16 +646,9 @@ int iso8583_set(struct iso8583 *handle, unsigned int index, const unsigned char 
 {
 	struct iso8583_field *field;
 	struct iso8583_data *userdata;
-	
-	if (!handle) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_set() argument error! the ptr of handle is null!");
-		return ISO8583_ENULL;
-	}
 
-	if (check_index(index) != ISO8583_OK) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_set() argument error! the index out of range! index = %d!", index);
-		return ISO8583_EINDEX;
-	}
+	CHK_HANDLE_PTR(handle);
+	CHK_INDEX(handle, index);
 
 	userdata = handle->datas[index];
 
@@ -708,15 +700,8 @@ int iso8583_get(struct iso8583 *handle, unsigned int index, const unsigned char 
 {
 	struct iso8583_data *userdata;
 
-	if (!handle) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_get() argument error! the ptr of handle is null!");
-		return ISO8583_ENULL;
-	}
-
-	if (check_index(index) != ISO8583_OK) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_get() argument error! the index out of range! index = %d!", index);
-		return ISO8583_EINDEX;
-	}
+	CHK_HANDLE_PTR(handle);
+	CHK_INDEX(handle, index);
 
 	userdata = handle->datas[index];
 
@@ -733,15 +718,8 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	unsigned char *bitmap;
 	unsigned int i;
 
-	if (!handle) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_pack() argument error! the ptr of handle is null!");
-		return ISO8583_ENULL;
-	}
-
-	if (handle->datas[0] == NULL) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_pack() error! the data of field 0 must be exist!");
-		return ISO8583_EFIELD0;
-	}
+	CHK_HANDLE_PTR(handle);
+	CHK_FIELD0(handle);
 
 	left_size = *size;
 	packed_size = 0;
@@ -802,11 +780,7 @@ int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *si
 	unsigned char *bitmap;
 	unsigned int bitmap_n = 64;			  /* default */
 
-	if (!handle) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_unpack() argument error! the ptr of handle is null!");
-		return ISO8583_ENULL;
-	}
-
+	CHK_HANDLE_PTR(handle);
 	iso8583_clear_datas(handle);
 
 	unpacked_size = 0;

@@ -1,28 +1,41 @@
 #ifndef _ISO8583_H_
 #define _ISO8583_H_
 
-#define ISO8583_OK         0
-#define ISO8583_EINDEX     1
-#define ISO8583_EHEXTOBIN  2
-#define ISO8583_EBINTOHEX  3
-#define ISO8583_EALIGN     4
-#define ISO8583_ETYPE      5
-#define ISO8583_EMALLOC    6
-#define ISO8583_ESIZE      7
-#define ISO8583_ENULL      8
-#define ISO8583_EFIELD0    9
+// error code
+
+enum {
+	ISO8583_OK,
+	ISO8583_EINDEX,
+	ISO8583_EHEXTOBIN,
+	ISO8583_EBINTOHEX,
+	ISO8583_EALIGN,
+	ISO8583_ETYPE,
+	ISO8583_EMALLOC,
+	ISO8583_ESIZE,
+	ISO8583_ENULL,
+	ISO8583_EFIELD0
+};
 
 #define ISO8583_FAILED -1
 
-#define ISO8583_L 0
-#define ISO8583_R 1
+// algin 
+enum {
+	ISO8583_L,
+	ISO8583_R
+};
 
-#define ISO8583_FIX    0
-#define ISO8583_LLVAR  1
-#define ISO8583_LLLVAR 2
+// type
+enum {
+	ISO8583_FIX,
+	ISO8583_LLVAR,
+	ISO8583_LLLVAR
+};
 
-#define ISO8583_U 0
-#define ISO8583_Z 1
+// compress
+enum {
+	ISO8583_U,
+	ISO8583_Z
+};
 
 #define ISO8583_ERROR_SIZE 128
 
