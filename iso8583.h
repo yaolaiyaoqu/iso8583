@@ -65,6 +65,7 @@ int iso8583_set(struct iso8583 *handle, unsigned int index, const unsigned char 
 int iso8583_get(struct iso8583 *handle, unsigned int index, const unsigned char **data, unsigned int *size);
 int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size);
 int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *size);
+int iso8583_size(struct iso8583 *handle, unsigned int *size);
 int iso8583_clear_datas(struct iso8583 *handle);
 int iso8583_clear_fields(struct iso8583 *handle);
 int iso8583_clear(struct iso8583 *handle);

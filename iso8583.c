@@ -375,6 +375,11 @@ static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsign
 
 	get_8583size_from_userdata(&iso8583_size, userdata->size, field->type, field->size, field->compress);
 
+    if (data == NULL) {
+        *size = iso8583_size;
+        return ISO8583_OK;
+    }
+
 	if (iso8583_size > *size) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
 			"to_8583data() error! not enough size! index = %d, size = %u, iso8583_size = %u!", index, *size, iso8583_size);
@@ -627,7 +632,7 @@ int iso8583_define(struct iso8583 *handle, unsigned int index, unsigned int size
 	if (!field) {
 		field = (struct iso8583_field *)malloc(sizeof(struct iso8583_field));
 		if (!field) {
-			snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() argument error! alloc field memory failed!");
+			snprintf(handle->error, ISO8583_ERROR_SIZE, "iso8583_define() error! alloc field memory failed!");
 			return ISO8583_EMALLOC;
 		}
 		handle->fields[index] = field;		
@@ -714,9 +719,10 @@ int iso8583_get(struct iso8583 *handle, unsigned int index, const unsigned char 
 int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size)
 {
 	unsigned int left_size, packed_size;
-	unsigned int bitmap_n = 64;			  /* default */
+	unsigned int bitmap_n;
 	unsigned char *bitmap;
 	unsigned int i;
+    int ret;
 
 	CHK_HANDLE_PTR(handle);
 	CHK_FIELD0(handle);
@@ -724,8 +730,10 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	left_size = *size;
 	packed_size = 0;
 
-	if (to_8583data(handle, 0, data, &left_size) != ISO8583_OK)
-		return ISO8583_FAILED;
+    ret = to_8583data(handle, 0, data, &left_size);
+
+	if (ISO8583_OK != ret)
+		return ret;
 
 	packed_size += left_size;
 	left_size = *size - packed_size;
@@ -759,8 +767,9 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 		
 	for (i = 2; i <= bitmap_n * 8; i++)	
 		if (handle->datas[i]) {
-			if (to_8583data(handle, i, data + packed_size, &left_size) != ISO8583_OK)
-				return ISO8583_FAILED;
+            ret = to_8583data(handle, i, data + packed_size, &left_size);
+			if (ISO8583_OK != ret)
+				return ret;
 	
 			packed_size += left_size;
 			left_size = *size - packed_size;
@@ -773,12 +782,52 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	return ISO8583_OK;
 }
 
+int iso8583_size(struct iso8583 *handle, unsigned int *size)
+{
+	unsigned int data_size;
+	unsigned int bitmap_n;
+	unsigned int i;
+    int ret;
+
+	CHK_HANDLE_PTR(handle);
+	CHK_FIELD0(handle);
+
+	*size = 0;
+
+	ret = to_8583data(handle, 0, NULL, &data_size);
+
+    if (ISO8583_OK != ret)
+        return ret;
+
+	*size += data_size;
+
+	if (handle->datas[1] != NULL && handle->datas[1]->data[0] == '1') {
+        bitmap_n = 16;
+	} else {
+        bitmap_n = 8;
+	}
+
+	*size += bitmap_n;
+
+	for (i = 2; i <= bitmap_n * 8; i++)	
+		if (handle->datas[i]) {
+            ret = to_8583data(handle, i, NULL, &data_size);
+
+            if (ISO8583_OK != ret)
+                return ret;
+
+			*size += data_size;
+		}
+
+	return ISO8583_OK;
+}
+
 int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *size)
 {
 	unsigned int i;
 	unsigned int unpacked_size, left_size;
 	unsigned char *bitmap;
-	unsigned int bitmap_n = 64;			  /* default */
+	unsigned int bitmap_n;
 
 	CHK_HANDLE_PTR(handle);
 	iso8583_clear_datas(handle);
