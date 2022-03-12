@@ -26,7 +26,7 @@ local object, err = iso8583.new(fields)
 
 Pack iso8583 datas to message.
 
-```
+```lua
 local message, err = object:Pack(datas)
 ```
 
@@ -34,7 +34,7 @@ local message, err = object:Pack(datas)
 
 Unpack message to iso8583 datas.
 
-```
+```lua
 local datas, err = object:Unpack(message)
 ```
 
