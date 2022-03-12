@@ -40,4 +40,3 @@ local datas, err = object:Unpack(message)
 
 ## License
 
-MIT © Wang Yao
