@@ -38,10 +38,6 @@ Unpack message to iso8583 datas.
 local datas, err = object:Unpack(message)
 ```
 
-## Contributing
-
-PRs accepted.
-
 ## License
 
 MIT © Wang Yao
