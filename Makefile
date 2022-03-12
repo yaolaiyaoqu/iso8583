@@ -2,7 +2,7 @@ CC = gcc
 LD = gcc
 
 CFLAGS = -O3 -Wall -fPIC
-LDFLAGS = -shared -llua -L/usr/lib64/
+LDFLAGS = -shared -llua
 
 TARGET = iso8583.so
 
