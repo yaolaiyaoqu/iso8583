@@ -1,10 +1,10 @@
-# Title
+# luaiso8583
 
 This is a small lua module. Can unpack and package iso8583 messages.
 
 ## Table of Contents
 
-* [Title](#title)
+* [luaiso8583](#luaiso8583)
 * [Install](#install)
 * [API](#api)
     * [Constant](#constant)
