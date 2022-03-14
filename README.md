@@ -7,6 +7,7 @@ This is a small lua module. Can unpack and package iso8583 messages.
 * [Title](#title)
 * [Install](#install)
 * [API](#api)
+    * [Constant](#constant)
     * [new](#new)
     * [Pack](#pack)
     * [Unpack](#unpack)
@@ -26,6 +27,23 @@ $ make
 `local iso8583 = require('iso8583');`
 
 [Back to TOC](#table-of-contents)
+
+### Constant
+
+There are following contstan in the module:
+
+iso8583.FIX
+iso8583.LLVAR
+iso8583.LLLVAR
+iso8583.RIGHT
+iso8583.R
+iso8583.LEFT
+iso8583.L
+iso8583.U
+iso8583.UNZIP
+iso8583.Z
+iso8583.ZIP
+
 
 ### new
 
