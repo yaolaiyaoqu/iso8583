@@ -30,7 +30,7 @@ $ make
 
 ### Constant
 
-There are following contstan in the module:
+There are following constant in the module:
 
 * iso8583.FIX
 * iso8583.LLVAR
