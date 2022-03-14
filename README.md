@@ -79,7 +79,7 @@ The fields is an array of lua tables holding the following keys:
 
 `syntax: message, err = obj:Pack(data)`
 
-Pack iso8583 data to message.
+Pack iso8583 data to message. In case of failures, returns `nil` and a string describing the error.
 
 [Back to TOC](#table-of-contents)
 
@@ -87,7 +87,7 @@ Pack iso8583 data to message.
 
 `syntax: data, err = obj:Unpack(message)`
 
-Unpack message to iso8583 data.
+Unpack message to iso8583 data. In case of failures, returns `nil` and a string describing the error.
 
 [Back to TOC](#table-of-contents)
 
