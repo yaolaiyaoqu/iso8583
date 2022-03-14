@@ -225,25 +225,24 @@ static int lua_iso8583_pack(lua_State *L)
 
 	lua_pop(L, 1);
 
-    iso8583_size(iso8583u->handle, &size);
-    iso8583_data = malloc(size);
+	iso8583_size(iso8583u->handle, &size);
+	iso8583_data = malloc(size);
 
-    if (iso8583_data == NULL) {
+	if (iso8583_data == NULL) {
 		lua_pushnil(L);
 		lua_pushstring(L, "Pack iso8583 error! alloc memory failed!");
 		return 2;
-    }
+	}
 
 	if (iso8583_pack(iso8583u->handle, iso8583_data, &size) != ISO8583_OK) {
 		lua_pushnil(L);
 		lua_pushfstring(L, "Pack iso8583 error! %s", iso8583u->handle->error);
-        free(iso8583_data);
+		free(iso8583_data);
 		return 2;
 	}
 
 	lua_pushlstring(L, (const char *)iso8583_data, size);
-    free(iso8583_data);
-
+	free(iso8583_data);
 	return 1;
 }
 
