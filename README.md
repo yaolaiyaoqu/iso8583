@@ -4,7 +4,6 @@ This is a small lua module. Can unpack and package iso8583 messages.
 
 ## Table of Contents
 
-* [luaiso8583](#luaiso8583)
 * [Install](#install)
 * [API](#api)
     * [Constant](#constant)
