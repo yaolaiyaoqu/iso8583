@@ -2,6 +2,15 @@
 
 This is a small lua module. Can unpack and package iso8583 messages.
 
+## Table of Contents
+
+* [Title](#title)
+* [Install](#install)
+* [API](#api)
+    * [new](#new)
+    * [Pack](#pack)
+    * [Unpack](#unpack)
+
 ## Install
 
 ```
@@ -10,33 +19,59 @@ $ cd iso8583
 $ make
 ```
 
+[Back to TOC](#table-of-contents)
+
 ## API
 
 `local iso8583 = require('iso8583');`
 
-### iso8583.new(fields)
+[Back to TOC](#table-of-contents)
 
-Create an iso8583 object.
+### new
 
-```lua
-local object, err = iso8583.new(fields)
-```
+`syntax: obj, err = iso8583.new(fields)`
 
-### object:Pack(datas)
+Creates an iso8583 object. In case of failures, returns `nil` and a string describing the error.
 
-Pack iso8583 datas to message.
+The fields is an array of lua tables holding the following keys:
 
-```
-local message, err = object:Pack(datas)
-```
+* `size`
 
-### object:Unpack(message)
+    The size of the field.
 
-Unpack message to iso8583 datas.
+* `type`
 
-```
-local datas, err = object:Unpack(message)
-```
+    The type of the field, it must be FIX, LLVAR, LLLVAR.
+
+* `align`
+
+    Align of the field, it must be R, L.
+
+* `pad`
+
+    Pad character of the field.
+
+* `compress`
+
+    U or Z, Z means BCD data, U means BIN data.
+
+[Back to TOC](#table-of-contents)
+
+### Pack
+
+`syntax: message, err = obj:Pack(data)`
+
+Pack iso8583 data to message.
+
+[Back to TOC](#table-of-contents)
+
+### Unpack
+
+`syntax: data, err = obj:Unpack(message)`
+
+Unpack message to iso8583 data.
+
+[Back to TOC](#table-of-contents)
 
 ## License
 
