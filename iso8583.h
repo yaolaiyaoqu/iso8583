@@ -28,19 +28,15 @@ enum {
 enum {
 	ISO8583_FIX,
 	ISO8583_LLVAR,
-	ISO8583_LLLVAR
+	ISO8583_LLLVAR,
+	ISO8583_LLVAR_U,
+	ISO8583_LLLVAR_U
 };
 
 // compress
 enum {
 	ISO8583_U,
 	ISO8583_Z
-};
-
-// varlentype
-enum {
-        VARLEN_BCD,
-        VARLEN_ASC
 };
 
 #define ISO8583_ERROR_SIZE 128
@@ -62,7 +58,6 @@ struct iso8583 {
 	struct iso8583_field *fields[129];
 	struct iso8583_data *datas[129];
 	char error[ISO8583_ERROR_SIZE];
-	unsigned varlentype:1;
 };
 
 struct iso8583 *iso8583_create();
@@ -72,6 +67,7 @@ int iso8583_set(struct iso8583 *handle, unsigned int index, const unsigned char 
 int iso8583_get(struct iso8583 *handle, unsigned int index, const unsigned char **data, unsigned int *size);
 int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size);
 int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *size, unsigned int maxfield);
+int iso8583_size(struct iso8583 *handle, unsigned int *size);
 int iso8583_clear_datas(struct iso8583 *handle);
 int iso8583_clear_fields(struct iso8583 *handle);
 int iso8583_clear(struct iso8583 *handle);

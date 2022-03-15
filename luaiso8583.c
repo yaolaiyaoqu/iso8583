@@ -8,8 +8,6 @@
 
 #include "iso8583.h"
 
-#define ISO8583_MAXSIZE 81920
-
 #if LUA_VERSION_NUM <= 501 
 
 #define lua_rawlen(L, index)      lua_objlen(L, index)
@@ -153,7 +151,6 @@ static int lua_iso8583_new(lua_State *L)
 			if (!check_pad_define(L, i, &pad))
 				return 2;
 
-			// define field
 			if (iso8583_define(iso8583h, i, (unsigned int)size, pad, (unsigned int)type, 
 					(unsigned int)align, (unsigned int)compress) != ISO8583_OK) {
 				lua_pushnil(L);
@@ -174,8 +171,8 @@ static int lua_iso8583_pack(lua_State *L)
 {
 	iso8583_userdata *iso8583u;
 	int n = lua_gettop(L);
-	unsigned int iso8583_maxsize = ISO8583_MAXSIZE;
-	unsigned char iso8583_data[ISO8583_MAXSIZE];
+	unsigned int size;
+	unsigned char *iso8583_data;
 
 	if (n < 2) {
 		lua_pushnil(L);
@@ -228,14 +225,24 @@ static int lua_iso8583_pack(lua_State *L)
 
 	lua_pop(L, 1);
 
-	if (iso8583_pack(iso8583u->handle, iso8583_data, &iso8583_maxsize) != ISO8583_OK) {
+	iso8583_size(iso8583u->handle, &size);
+	iso8583_data = malloc(size);
+
+	if (iso8583_data == NULL) {
 		lua_pushnil(L);
-		lua_pushfstring(L, "Pack iso8583 error! %s", iso8583u->handle->error);
+		lua_pushstring(L, "Pack iso8583 error! alloc memory failed!");
 		return 2;
 	}
 
-	lua_pushlstring(L, (const char *)iso8583_data, iso8583_maxsize);
-	
+	if (iso8583_pack(iso8583u->handle, iso8583_data, &size) != ISO8583_OK) {
+		lua_pushnil(L);
+		lua_pushfstring(L, "Pack iso8583 error! %s", iso8583u->handle->error);
+		free(iso8583_data);
+		return 2;
+	}
+
+	lua_pushlstring(L, (const char *)iso8583_data, size);
+	free(iso8583_data);
 	return 1;
 }
 
@@ -327,7 +334,6 @@ static const struct luaL_Reg iso8583lib_f[] = {
 static const struct luaL_Reg iso8583lib_m[] = {
 	{ "Pack",   lua_iso8583_pack   },
 	{ "Unpack", lua_iso8583_unpack },
-	{ "close",  lua_iso8583_close  },
 	{ "__gc",   lua_iso8583_close  },
 	{ NULL, NULL}
 };
@@ -356,6 +362,8 @@ int luaopen_iso8583(lua_State *L)
 	set_constant("FIX",    ISO8583_FIX);
 	set_constant("LLVAR",  ISO8583_LLVAR);
 	set_constant("LLLVAR", ISO8583_LLLVAR);
+	set_constant("LLVAR",  ISO8583_LLVAR_U);
+	set_constant("LLLVAR", ISO8583_LLLVAR_U);
 
 	return 1;
 }
