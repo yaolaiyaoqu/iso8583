@@ -43,70 +43,70 @@
 } while (0)
 
 static struct iso8583_field default_fields[129] = {
-	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 0.   Message Type             n    4						
+	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 0.   Message Type             n    4						
 	{   1, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 1.   BIT MAP EXTENDED         b    1						
-	{  19, 'F', ISO8583_LLVAR , ISO8583_L, ISO8583_Z },   // 2.   PRIMARY ACC. NUM         n    19   llvar				  
-	{   6, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 3.   PROCESSING CODE          n    6						
-	{  12, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 4.   AMOUNT, TRANS.           n    12						
-	{  12, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 5.   AMOUNT, SETTLEMENT       n    12						
-	{  12, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 6.   AMOUNT,CardHolder bill   n    12						
-	{  10, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 7.   TRANSMISSION D & T       n    10   mmddhhmmss			 
-	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 8.   AMN., CH BILLING FEE     n    8						
-	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 9.   CONV RATE,SET'T          n    8						
-	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 10.  CONV RATE, CH billing    n    8						
-	{   6, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 11.  SYSTEM TRACE #           n    6						
-	{   6, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 12.  TIME, LOCAL TRAN         n    6    hhmmss				 
-	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 13.  DATE, LOCAL TRAN         n    4    mmdd				   
-	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 14.  DATE, EXPIRATION         n    4    yymm				   
-	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 15.  DATE, SETTLEMENT         n    4    mmdd				   
-	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 16.  DATE, CONVERSION         n    4    mmdd				   
-	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 17.  DATE, CAPTURE            n    4    mmdd				   
-	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 18.  MERCHANT'S TYPE          n    4						
-	{   3, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 19.  AI COUNTRY CODE          n    3						
-	{   3, 'F', ISO8583_FIX   , ISO8583_L, ISO8583_Z },   // 20.  PAN EXT.,CO'Y CODE       n    3						
-	{   3, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 21.  FI COUNTRY CODE          n    3						
-	{   3, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_Z },   // 22.  POS ENTRY MODE           n    3						
-	{   3, 'F', ISO8583_FIX   , ISO8583_L, ISO8583_Z },   // 23.  CARD SEQUECE NUM.        n    3						
-	{   3, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_Z },   // 24.  NETWORK INT'L ID         n    3						
-	{   2, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 25.  POS COND. CODE           n    2						
-	{   2, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_Z },   // 26.  POS PIN CAP. CODE        n    2						
-	{   1, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 27.  AUTH ID RES. LEN         n    1						
-	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 28.  AMT. TRANS FEE           n    8						
-	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 29.  AMT. SETT.  FEE          n    8						
-	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 30.  AMT. TRAN PROC FEE       n    8						
-	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_Z },   // 31.  AMT. SET PROC FEE        n    8						
-	{  11, '0', ISO8583_LLVAR , ISO8583_L, ISO8583_Z },   // 32.  ACOUIR. INST. ID         n    11   llvar				  
-	{  11, 'F', ISO8583_LLVAR , ISO8583_L, ISO8583_Z },   // 33.  FI ID                    n    11   llvar				  
-	{  11, 'F', ISO8583_LLVAR , ISO8583_L, ISO8583_Z },   // 34.  PAN EXTENDED             n    8    llvar				  
-	{  37, 'F', ISO8583_LLVAR , ISO8583_L, ISO8583_Z },   // 35.  TRACK 2 DATA             z    37   llvar				  
-	{ 104, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_Z },   // 36.  TRACK 3 DATA             z    104  lllvar				 
+	{  19, 'F', ISO8583_LLVAR , ISO8583_L, ISO8583_U },   // 2.   PRIMARY ACC. NUM         n    19   llvar				  
+	{   6, '0', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 3.   PROCESSING CODE          n    6						
+	{  12, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 4.   AMOUNT, TRANS.           n    12						
+	{  12, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 5.   AMOUNT, SETTLEMENT       n    12						
+	{  12, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 6.   AMOUNT,CardHolder bill   n    12						
+	{  10, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 7.   TRANSMISSION D & T       n    10   mmddhhmmss			 
+	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 8.   AMN., CH BILLING FEE     n    8						
+	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 9.   CONV RATE,SET'T          n    8						
+	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 10.  CONV RATE, CH billing    n    8						
+	{   6, '0', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 11.  SYSTEM TRACE #           n    6						
+	{   6, '0', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 12.  TIME, LOCAL TRAN         n    6    hhmmss				 
+	{   4, '0', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 13.  DATE, LOCAL TRAN         n    4    mmdd				   
+	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 14.  DATE, EXPIRATION         n    4    yymm				   
+	{   4, '0', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 15.  DATE, SETTLEMENT         n    4    mmdd				   
+	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 16.  DATE, CONVERSION         n    4    mmdd				   
+	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 17.  DATE, CAPTURE            n    4    mmdd				   
+	{   4, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 18.  MERCHANT'S TYPE          n    4						
+	{   3, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 19.  AI COUNTRY CODE          n    3						
+	{   3, 'F', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 20.  PAN EXT.,CO'Y CODE       n    3						
+	{   3, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 21.  FI COUNTRY CODE          n    3						
+	{   3, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 22.  POS ENTRY MODE           n    3						
+	{   3, 'F', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 23.  CARD SEQUECE NUM.        n    3						
+	{   3, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 24.  NETWORK INT'L ID         n    3						
+	{   2, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 25.  POS COND. CODE           n    2						
+	{   2, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 26.  POS PIN CAP. CODE        n    2						
+	{   1, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 27.  AUTH ID RES. LEN         n    1						
+	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 28.  AMT. TRANS FEE           n    8						
+	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 29.  AMT. SETT.  FEE          n    8						
+	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 30.  AMT. TRAN PROC FEE       n    8						
+	{   8, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 31.  AMT. SET PROC FEE        n    8						
+	{  11, '0', ISO8583_LLVAR , ISO8583_L, ISO8583_U },   // 32.  ACOUIR. INST. ID         n    11   llvar				  
+	{  11, 'F', ISO8583_LLVAR , ISO8583_L, ISO8583_U },   // 33.  FI ID                    n    11   llvar				  
+	{  11, 'F', ISO8583_LLVAR , ISO8583_L, ISO8583_U },   // 34.  PAN EXTENDED             n    8    llvar				  
+	{  37, 'F', ISO8583_LLVAR , ISO8583_L, ISO8583_U },   // 35.  TRACK 2 DATA             z    37   llvar				  
+	{ 104, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 36.  TRACK 3 DATA             z    104  lllvar				 
 	{  12, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 37.  RETR. REF. NUM           an   12						
-	{   6, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 38.  AUTH. ID. RESP           an   6						
-	{   2, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 39.  RESPONSE CODE            an   2						
+	{   6, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 38.  AUTH. ID. RESP           an   6						
+	{   2, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 39.  RESPONSE CODE            an   2						
 	{   3, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 40.  SERV. REST'N CODE        an   3						
-	{   8, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 41.  TERMINAL ID              ans  8						
+	{   8, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 41.  TERMINAL ID              ans  8						
 	{  15, 'F', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 42.  CARD ACC. ID             ans  15						
 	{  40, ' ', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 43.  CARD ACC. NAME           ans  40						
-	{  25, '0', ISO8583_LLVAR , ISO8583_R, ISO8583_U },   // 44.  ADD. RESP DATA           an   25   llvar				  
+	{  25, '0', ISO8583_LLVAR , ISO8583_L, ISO8583_U },   // 44.  ADD. RESP DATA           an   25   llvar				  
 	{  76, 'F', ISO8583_LLVAR , ISO8583_L, ISO8583_U },   // 45.  TRACK 1 DATA             an   76   llvar				  
 	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 46.  ADD. DATA - ISO          an   999  lllvar				 
 	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 47.  ADD. DATA - NATI.        an   999  lllvar					  
 	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 48.  ADD. DATA - PRI.         an   999  lllvar				 
-	{   3, ' ', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 49.  CC, TRANSACTION          a    3						
-	{   3, '0', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 50.  CC, SETTLEMENT           an   3						
-	{   3, '0', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 51.  CC, CH. BILLING          a    3					   
-	{   8, 'D', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 52.  PIN DATA                 b    8						
-	{  16, '0', ISO8583_FIX   , ISO8583_L, ISO8583_Z },   // 53.  SECU. CONT. INFO.        n    16						
-	{ 120, 'F', ISO8583_LLLVAR, ISO8583_R, ISO8583_U },   // 54.  ADDITIONAL AMTS          an   120  lllvar			 
+	{   3, ' ', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 49.  CC, TRANSACTION          a    3						
+	{   3, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 50.  CC, SETTLEMENT           an   3						
+	{   3, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 51.  CC, CH. BILLING          a    3					   
+	{   8, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 52.  PIN DATA                 b    8						
+	{  16, '0', ISO8583_FIX   , ISO8583_R, ISO8583_U },   // 53.  SECU. CONT. INFO.        n    16						
+	{ 120, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 54.  ADDITIONAL AMTS          an   120  lllvar			 
 	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 55.  REVERVED ISO             ans  999  lllvar				 
 	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 56.  REVERVED ISO             ans  999  lllvar				 
 	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 57.  REVERVED NATIONAL        ans  999  lllvar				 
 	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 58.  REVERVED NATIONAL        ans  999  lllvar				 
 	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 59.  REVERVED NATIONAL        ans  999  lllvar
-	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_Z },   // 60.  RESERVED - PRIV1         ans  999  lllvar				 
-	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_Z },   // 61.  RESERVED - PRIV2         ans  999  lllvar				 
-	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 62.  RESERVED - PRIV2         ans  999  lllvar				 
-	{ 999, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 63.  RESERVED - PRIV3         ans  999  lllvar				 
+	{ 100, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 60.  RESERVED - PRIV1         ans  999  lllvar				 
+	{ 200, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 61.  RESERVED - PRIV2         ans  999  lllvar				 
+	{ 200, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 62.  RESERVED - PRIV2         ans  999  lllvar				 
+	{ 200, 'F', ISO8583_LLLVAR, ISO8583_L, ISO8583_U },   // 63.  RESERVED - PRIV3         ans  999  lllvar				 
 	{   8, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 64.  MSG. AUTH. CODE          b    8						
 	{   8, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 65.  BIT MAP, EXTENDED        b    8						
 	{   1, 'D', ISO8583_FIX   , ISO8583_L, ISO8583_U },   // 66.  SETTLEMENT CODE          n    1						
@@ -184,6 +184,17 @@ static inline unsigned char bin2bcd(unsigned val)
 	return ((val / 10) << 4) + val % 10;
 }
 
+static inline unsigned asc2bin(unsigned char *val, int len)
+{
+	unsigned char *p = val;
+	unsigned int res = 0;
+	for (int i=0; i<len; i++){
+	    res = res * 10 + *p - '0';
+    	    p++;
+	}
+	return res;
+}
+
 static inline int hex_to_bin(char ch)
 {
 	if ((ch >= '0') && (ch <= '9'))
@@ -224,17 +235,21 @@ static inline int correct_size(unsigned int *size, unsigned int type, unsigned i
 }
 
 static inline int get_8583size_from_userdata(unsigned int *iso8583_size, unsigned int user_size, 
-						unsigned int type, unsigned int fix_size, unsigned int compress)
+						unsigned int type, unsigned int fix_size, unsigned int compress,
+						unsigned int varlentype )
 {
+	unsigned int offset;
 	switch (type) {
 	case ISO8583_FIX:
 		*iso8583_size = compress ? (fix_size + 1) / 2 : user_size;
 		break;
 	case ISO8583_LLVAR:
-		*iso8583_size = compress ? (user_size + 1) / 2 + 1 : user_size + 1;
+		offset = (varlentype == VARLEN_ASC) ? 2:1;
+		*iso8583_size = compress ? (user_size + 1) / 2 + 1 : user_size + offset;
 		break;
 	case ISO8583_LLLVAR:
-		*iso8583_size = compress ? (user_size + 1) / 2 + 2 : user_size + 2;
+		offset = (varlentype == VARLEN_ASC) ? 3:2;
+		*iso8583_size = compress ? (user_size + 1) / 2 + 2 : user_size + offset;
 		break;
 	default:
 		return ISO8583_ETYPE;
@@ -339,14 +354,23 @@ static inline int to_fix_8583data(unsigned char *iso8583_data, unsigned int iso8
 
 static inline int to_var_8583data(unsigned char *iso8583_data, unsigned int iso8583_size,
 					unsigned char *user_data, unsigned int user_size,
-					unsigned int align, char pad, unsigned int compress, unsigned int headlen)
+					unsigned int align, char pad, unsigned int compress, 
+					unsigned int headlen, unsigned int varlentype)
 {
 	int i;
 	unsigned int size = user_size;
 
-	for (i = 0; i < headlen; i++) {
+	if (varlentype == VARLEN_ASC) {
+	    for (i = 0; i < headlen; i++) {
+		iso8583_data[headlen - 1 - i] = size % 10 + '0';
+		size /= 10;   
+	    }
+	 	
+	} else {
+	    for (i = 0; i < headlen; i++) {
 		iso8583_data[headlen - 1 - i] = bin2bcd(size % 100);
 		size /= 100;   
+	    }
 	}
 
 	return to_fix_8583data(iso8583_data + headlen, iso8583_size - headlen, user_data, user_size, align, pad, compress);
@@ -373,7 +397,7 @@ static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsign
 		return ISO8583_ETYPE;
 	}
 
-	get_8583size_from_userdata(&iso8583_size, userdata->size, field->type, field->size, field->compress);
+	get_8583size_from_userdata(&iso8583_size, userdata->size, field->type, field->size, field->compress, handle->varlentype);
 
 	if (iso8583_size > *size) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
@@ -381,15 +405,19 @@ static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsign
 		return ISO8583_ESIZE;
 	}
 
+	unsigned int offset;
+
 	switch (field->type) {
 	case ISO8583_FIX:
 		ret = to_fix_8583data(data, iso8583_size, userdata->data, userdata->size, field->align, field->pad, field->compress);
 		break;
 	case ISO8583_LLVAR:
-		ret = to_var_8583data(data, iso8583_size, userdata->data, userdata->size, field->align, field->pad, field->compress, 1);
+		offset = (handle->varlentype == VARLEN_ASC) ? 2 : 1;
+		ret = to_var_8583data(data, iso8583_size, userdata->data, userdata->size, field->align, field->pad, field->compress, offset, handle->varlentype);
 		break;
 	case ISO8583_LLLVAR:
-		ret = to_var_8583data(data, iso8583_size, userdata->data, userdata->size, field->align, field->pad, field->compress, 2);
+		offset = (handle->varlentype == VARLEN_ASC) ? 3 : 2;
+		ret = to_var_8583data(data, iso8583_size, userdata->data, userdata->size, field->align, field->pad, field->compress, offset, handle->varlentype);
 		break;
 	}
 
@@ -404,45 +432,15 @@ static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsign
 	return ISO8583_OK;
 }
 
-static inline int get_8583size_from_8583data(unsigned int *size, unsigned char *iso8583_data, unsigned int iso8583_size,
-							unsigned int compress, unsigned int type, unsigned int fix_length)
-{
-	unsigned int l;
-
-	switch (type) {
-	case ISO8583_FIX:
-		*size = compress ? (fix_length + 1) / 2 : fix_length;
-		break;
-	case ISO8583_LLVAR:
-		if (iso8583_size < 1)
-			return ISO8583_ESIZE;
-
-		l = bcd2bin(iso8583_data[0]);	
-
-		*size = compress ? 1 + (l + 1) / 2 : 1 + l;
-		break;
-	case ISO8583_LLLVAR:
-		if (iso8583_size < 2)	
-			return ISO8583_ESIZE;
-
-		l = bcd2bin(iso8583_data[0]) * 100 + bcd2bin(iso8583_data[1]);
-
-		*size = compress ? 2 + (l + 1) / 2 : 2 + l;
-		break;
-	}
-
-	if (*size > iso8583_size)
-		return ISO8583_ESIZE;	
-
-	return ISO8583_OK;
-}
 
 static inline int get_size_from_8583data(unsigned int *iso8583_size, unsigned int *user_size,
 						unsigned char *iso8583_data, unsigned int data_size,
-						unsigned int compress, unsigned int type, unsigned int fix_length)
+						unsigned int compress, unsigned int type, unsigned int fix_length,                                                 unsigned int varlentype)
+
 {
 	unsigned int l;
 
+	unsigned int offset;
 	switch (type) {
 	case ISO8583_FIX:
 		*iso8583_size = compress ? (fix_length + 1) / 2 : fix_length;
@@ -452,18 +450,28 @@ static inline int get_size_from_8583data(unsigned int *iso8583_size, unsigned in
 		if (data_size < 1)
 			return ISO8583_ESIZE;
 
-		l = bcd2bin(iso8583_data[0]);	
+		if (varlentype == VARLEN_ASC) {
+		    l = asc2bin(iso8583_data, 2);
+		} else {
+		    l = bcd2bin(iso8583_data[0]);	
+		}
+		offset = (varlentype == VARLEN_ASC) ? 2:1;
 
-		*iso8583_size = compress ? 1 + (l + 1) / 2 : 1 + l;
+		*iso8583_size = compress ? 1 + (l + 1) / 2 : offset + l;
 		*user_size = l;
 		break;
 	case ISO8583_LLLVAR:
 		if (data_size < 2)	
 			return ISO8583_ESIZE;
 
-		l = bcd2bin(iso8583_data[0]) * 100 + bcd2bin(iso8583_data[1]);
+		if (varlentype == VARLEN_ASC) {
+		    l = asc2bin(iso8583_data, 3);
+		} else {
+		    l = bcd2bin(iso8583_data[0]) * 100 + bcd2bin(iso8583_data[1]);
+		}
 
-		*iso8583_size = compress ? 2 + (l + 1) / 2 : 2 + l;
+		offset = (varlentype == VARLEN_ASC) ? 3:2;
+		*iso8583_size = compress ? 2 + (l + 1) / 2 : offset + l;
 		*user_size = l;	
 		break;
 	default:
@@ -533,7 +541,7 @@ static inline int to_userdata(struct iso8583 *handle, unsigned int index, unsign
 	struct iso8583_data *user_data;
 	unsigned int iso8583_size, user_size;
 
-	int ret = get_size_from_8583data(&iso8583_size, &user_size, data, *size, field->compress, field->type, field->size);
+	int ret = get_size_from_8583data(&iso8583_size, &user_size, data, *size, field->compress, field->type, field->size, handle->varlentype);
 
 	if (ret != ISO8583_OK) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
@@ -564,15 +572,19 @@ static inline int to_userdata(struct iso8583 *handle, unsigned int index, unsign
 		return ISO8583_EMALLOC;
 	}
 
+	unsigned int offset;
+
 	switch (field->type) {
 	case ISO8583_FIX:
 		to_userdata_fix(user_data->data, data, iso8583_size, user_size, field->compress, field->align);
 		break;
 	case ISO8583_LLVAR:
-		to_userdata_fix(user_data->data, data + 1, iso8583_size - 1, user_size, field->compress, field->align);
+		offset = (handle->varlentype == VARLEN_ASC) ? 2 : 1;
+		to_userdata_fix(user_data->data, data + offset, iso8583_size - offset, user_size, field->compress, field->align);
 		break;
 	case ISO8583_LLLVAR:
-		to_userdata_fix(user_data->data, data + 2, iso8583_size - 2, user_size, field->compress, field->align);
+		offset = (handle->varlentype == VARLEN_ASC) ? 3:2;
+		to_userdata_fix(user_data->data, data + offset, iso8583_size - offset, user_size, field->compress, field->align);
 		break;
 	}
 
@@ -608,6 +620,7 @@ struct iso8583 *iso8583_create()
 		return NULL;
 
 	memset(handle, 0, sizeof(struct iso8583));
+	handle->varlentype = VARLEN_ASC;
 
 	return handle;
 }
@@ -773,7 +786,7 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	return ISO8583_OK;
 }
 
-int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *size)
+int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *size, unsigned int maxfield)
 {
 	unsigned int i;
 	unsigned int unpacked_size, left_size;
@@ -817,7 +830,7 @@ int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *si
 	unpacked_size += bitmap_n;	
 	left_size = *size - unpacked_size;
 		
-	for (i = 2; i <= bitmap_n * 8; i++)
+	for (i = 2; i <= bitmap_n * 8 && i <= maxfield; i++)
 		if (bitmap_get_bit(bitmap, i)) {
 			if (to_userdata(handle, i, data + unpacked_size, &left_size) != ISO8583_OK)
 				return ISO8583_FAILED;
