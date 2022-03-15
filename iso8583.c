@@ -473,9 +473,8 @@ static inline int get_size_from_8583data(unsigned int *iso8583_size, unsigned in
 		*iso8583_size = (compress ? (l + 1) / 2 : l) + 2;
 		*user_size = l;	
 		break;
-
 	case ISO8583_LLVAR_U:
-		if (data_size < 1)
+		if (data_size < 2)
 			return ISO8583_ESIZE;
 
 		l = asc2bin(iso8583_data, 2);
@@ -483,18 +482,17 @@ static inline int get_size_from_8583data(unsigned int *iso8583_size, unsigned in
 		*user_size = l;
 		break;
 	case ISO8583_LLLVAR_U:
-		if (data_size < 2)	
+		if (data_size < 3)	
 			return ISO8583_ESIZE;
 
 		l = asc2bin(iso8583_data, 3);
-		*iso8583_size = (compress ? (l + 1) / 2 : l) + 3;
+		*iso8583_size = compress ? (l + 1) / 2 + 3 : l + 3;
 		*user_size = l;	
-
+                break;
 	default:
 		return ISO8583_ETYPE;
 	}
-
-	if (*iso8583_size > data_size)
+	if (*iso8583_size > data_size) 
 		return ISO8583_ESIZE;	
 
 	return ISO8583_OK;
@@ -525,7 +523,7 @@ static inline int to_hex_from_left(unsigned char *data, unsigned char *bin, unsi
 	int i;
 
 	for (i = 0; i < user_size; i++) {
-		unsigned int byte = bin[i / 2];
+		unsigned int byte = bin[i / 2 ];
 
 		byte = (i % 2) ? byte & 0x0f : byte >> 4;
 
@@ -561,7 +559,7 @@ static inline int to_userdata(struct iso8583 *handle, unsigned int index, unsign
 
 	if (ret != ISO8583_OK) {
 		snprintf(handle->error, ISO8583_ERROR_SIZE, 
-			"to_userdata() error! get_size_from_8583data error! index = %u, compress = %u, type = %u, field->size = %u, size = %u!", 
+			"to_userdata() error! get_size_from_8583 data error! index = %u, compress = %u, type = %u, field->size = %u, size = %u", 
 			index, field->compress, field->type, field->size, *size);
 		return ret;
 	}

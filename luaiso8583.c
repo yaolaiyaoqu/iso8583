@@ -362,8 +362,8 @@ int luaopen_iso8583(lua_State *L)
 	set_constant("FIX",    ISO8583_FIX);
 	set_constant("LLVAR",  ISO8583_LLVAR);
 	set_constant("LLLVAR", ISO8583_LLLVAR);
-	set_constant("LLVAR",  ISO8583_LLVAR_U);
-	set_constant("LLLVAR", ISO8583_LLLVAR_U);
+	set_constant("LLVAR_U",  ISO8583_LLVAR_U);
+	set_constant("LLLVAR_U", ISO8583_LLLVAR_U);
 
 	return 1;
 }
