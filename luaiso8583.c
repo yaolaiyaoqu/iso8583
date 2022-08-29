@@ -251,6 +251,7 @@ static int lua_iso8583_unpack(lua_State *L)
 	iso8583_userdata *iso8583u;
 	unsigned char *iso8583_data;
 	unsigned int iso8583_size;
+	unsigned int maxfield;
 	size_t data_len;
 	unsigned int i;
 	int n = lua_gettop(L);
@@ -261,6 +262,7 @@ static int lua_iso8583_unpack(lua_State *L)
 		return 2;
 	}
 
+
 	iso8583u = (iso8583_userdata *)luaL_checkudata(L, 1, "iso8583");
 
 	if (!lua_isstring(L, 2)) {
@@ -269,11 +271,20 @@ static int lua_iso8583_unpack(lua_State *L)
 		return 2;
 	}
 
+	maxfield = (unsigned int )lua_tonumber(L, 3);
+	if (maxfield > 128 ) {
+		lua_pushnil(L);
+		lua_pushstring(L, "arguments error! maxfield must in [2,128]!");
+		return 2;
+	}
+
 	iso8583_clear_datas(iso8583u->handle);
-	iso8583_data = (unsigned char *)lua_tolstring(L, -1, &data_len);
+	//iso8583_data = (unsigned char *)lua_tolstring(L, -1, &data_len);
+	iso8583_data = (unsigned char *)lua_tolstring(L, 2, &data_len);
 	iso8583_size = (unsigned int)data_len;
 
-	if (iso8583_unpack(iso8583u->handle, iso8583_data, &iso8583_size) != ISO8583_OK) {
+
+	if (iso8583_unpack(iso8583u->handle, iso8583_data, &iso8583_size, maxfield) != ISO8583_OK) {
 		lua_pushnil(L);
 		lua_pushfstring(L, "unpack iso8583 error! %s", iso8583u->handle->error);
 		return 2;
@@ -281,7 +292,7 @@ static int lua_iso8583_unpack(lua_State *L)
 
 	lua_createtable (L, 129, 0);
 
-	for (i = 0; i < 129; i++) {
+	for (i = 0; i < 129 && i <= maxfield; i++) {
 		const unsigned char *user_data;
 		unsigned int user_size;
 
@@ -351,6 +362,8 @@ int luaopen_iso8583(lua_State *L)
 	set_constant("FIX",    ISO8583_FIX);
 	set_constant("LLVAR",  ISO8583_LLVAR);
 	set_constant("LLLVAR", ISO8583_LLLVAR);
+	set_constant("LLVAR_U",  ISO8583_LLVAR_U);
+	set_constant("LLLVAR_U", ISO8583_LLLVAR_U);
 
 	return 1;
 }

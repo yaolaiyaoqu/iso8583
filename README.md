@@ -42,6 +42,8 @@ There are following constant in the module:
 * iso8583.UNZIP
 * iso8583.Z
 * iso8583.ZIP
+* iso8583.LLVAR_U
+* iso8583.LLLVAR_U
 
 [Back to TOC](#table-of-contents)
 
@@ -59,7 +61,7 @@ The fields is an array of lua tables holding the following keys:
 
 * `type`
 
-    The type of the field, it must be FIX, LLVAR, LLLVAR.
+    The type of the field, it must be FIX, LLVAR, LLLVAR, LLVAR_U, LLLVAR_U. U means ASCII prefix.
 
 * `align`
 

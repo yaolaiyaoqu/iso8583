@@ -28,7 +28,9 @@ enum {
 enum {
 	ISO8583_FIX,
 	ISO8583_LLVAR,
-	ISO8583_LLLVAR
+	ISO8583_LLLVAR,
+	ISO8583_LLVAR_U,
+	ISO8583_LLLVAR_U
 };
 
 // compress
@@ -64,7 +66,7 @@ int iso8583_define(struct iso8583 *handle, unsigned int index, unsigned int size
 int iso8583_set(struct iso8583 *handle, unsigned int index, const unsigned char *data, unsigned int size);
 int iso8583_get(struct iso8583 *handle, unsigned int index, const unsigned char **data, unsigned int *size);
 int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size);
-int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *size);
+int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *size, unsigned int maxfield);
 int iso8583_size(struct iso8583 *handle, unsigned int *size);
 int iso8583_clear_datas(struct iso8583 *handle);
 int iso8583_clear_fields(struct iso8583 *handle);
