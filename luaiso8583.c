@@ -258,7 +258,13 @@ static int lua_iso8583_unpack(lua_State *L)
 
 	if (n < 2) {
 		lua_pushnil(L);
-		lua_pushstring(L, "arguments error! too small!");
+		lua_pushstring(L, "arguments error! too few arguments!");
+		return 2;
+	}
+
+	if (n > 3) {
+		lua_pushnil(L);
+		lua_pushstring(L, "arguments error! too many arguments!");
 		return 2;
 	}
 
@@ -270,10 +276,16 @@ static int lua_iso8583_unpack(lua_State *L)
 		return 2;
 	}
 
-	if (n >= 3) {
+	if (n == 3) {
+		if (!lua_isnumber(L, 3)) {
+			lua_pushnil(L);
+			lua_pushstring(L, "argument error! maxfield must be number!");
+			return 2;
+		}
+
 		maxfield = (unsigned int )lua_tonumber(L, 3);
 
-		if (maxfield > 128 ) {
+		if (maxfield < 2 || maxfield > 128 ) {
 			lua_pushnil(L);
 			lua_pushstring(L, "arguments error! maxfield must in [2,128]!");
 			return 2;
