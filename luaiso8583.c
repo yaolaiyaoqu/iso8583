@@ -262,7 +262,6 @@ static int lua_iso8583_unpack(lua_State *L)
 		return 2;
 	}
 
-
 	iso8583u = (iso8583_userdata *)luaL_checkudata(L, 1, "iso8583");
 
 	if (!lua_isstring(L, 2)) {
@@ -271,18 +270,21 @@ static int lua_iso8583_unpack(lua_State *L)
 		return 2;
 	}
 
-	maxfield = (unsigned int )lua_tonumber(L, 3);
-	if (maxfield > 128 ) {
-		lua_pushnil(L);
-		lua_pushstring(L, "arguments error! maxfield must in [2,128]!");
-		return 2;
+	if (n == 3) {
+		maxfield = (unsigned int )lua_tonumber(L, 3);
+
+		if (maxfield > 128 ) {
+			lua_pushnil(L);
+			lua_pushstring(L, "arguments error! maxfield must in [2,128]!");
+			return 2;
+		}
+	} else {
+		maxfield = 128;
 	}
 
 	iso8583_clear_datas(iso8583u->handle);
-	//iso8583_data = (unsigned char *)lua_tolstring(L, -1, &data_len);
 	iso8583_data = (unsigned char *)lua_tolstring(L, 2, &data_len);
 	iso8583_size = (unsigned int)data_len;
-
 
 	if (iso8583_unpack(iso8583u->handle, iso8583_data, &iso8583_size, maxfield) != ISO8583_OK) {
 		lua_pushnil(L);

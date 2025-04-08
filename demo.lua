@@ -33,7 +33,7 @@ local parser, err = iso8583.new({
 
 print (err)
 
-local msg, err = parser:Unpack(iso8583_str, 128)
+local msg, err = parser:Unpack(iso8583_str)
 
 print (err)
 

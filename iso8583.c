@@ -5,7 +5,19 @@
 
 #include "iso8583.h"
 
-#define CHK_HANDLE_PTR(handle) do { if (!handle) return ISO8583_ENULL; } while (0)
+#define CHK_HANDLE_PTR(handle) do { \
+	if (!handle) { \
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "function %s: argument error! the handle point is null!", __func__); \
+		return ISO8583_ENULL; \
+	} \
+} while (0)
+
+#define CHK_DATA_PTR(data) do { \
+	if (!data) { \
+		snprintf(handle->error, ISO8583_ERROR_SIZE, "function %s: argument error! the data point is null!", __func__); \
+		return ISO8583_ENULL; \
+	} \
+} while (0)
 
 #define CHK_INDEX(handle, index) do { \
 	if (index > 128) { \
@@ -730,6 +742,7 @@ int iso8583_get(struct iso8583 *handle, unsigned int index, const unsigned char 
 	struct iso8583_data *userdata;
 
 	CHK_HANDLE_PTR(handle);
+	CHK_DATA_PTR(data);
 	CHK_INDEX(handle, index);
 
 	userdata = handle->datas[index];
@@ -749,6 +762,7 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	int ret;
 
 	CHK_HANDLE_PTR(handle);
+	CHK_DATA_PTR(data);
 	CHK_FIELD0(handle);
 
 	left_size = *size;
@@ -852,6 +866,7 @@ int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *si
 	unsigned int bitmap_n;
 
 	CHK_HANDLE_PTR(handle);
+	CHK_DATA_PTR(data);
 	iso8583_clear_datas(handle);
 
 	unpacked_size = 0;

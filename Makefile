@@ -22,7 +22,7 @@ LUA_CMODULE_DIR ?= $(PREFIX)/lib/lua/$(LUA_VERSION)
 LUA_MODULE_DIR ?=  $(PREFIX)/share/lua/$(LUA_VERSION)
 LUA_BIN_DIR ?=     $(PREFIX)/bin
 
-BUILD_CFLAGS =  -I$(LUA_INCLUDE_DIR) $(CISO8583_CFLAGS)
+BUILD_CFLAGS =  `pkg-config --cflags --libs lua-$(LUA_VERSION)` $(CISO8583_CFLAGS)
 OBJS = iso8583.o luaiso8583.o
 
 
