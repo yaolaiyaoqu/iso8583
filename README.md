@@ -19,6 +19,14 @@ $ cd iso8583
 $ make
 ```
 
+To specify the Lua version, use -e LUA_VERSION=xxx. The default Lua version is 5.1.
+
+```
+$ git clone git@github.com:yaolaiyaoqu/iso8583.git
+$ cd iso8583
+$ make -e LUA_VERSION=5.4
+```
+
 [Back to TOC](#table-of-contents)
 
 ## API
