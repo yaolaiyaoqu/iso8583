@@ -270,7 +270,7 @@ static int lua_iso8583_unpack(lua_State *L)
 		return 2;
 	}
 
-	if (n == 3) {
+	if (n >= 3) {
 		maxfield = (unsigned int )lua_tonumber(L, 3);
 
 		if (maxfield > 128 ) {
