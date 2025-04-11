@@ -805,7 +805,7 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 		
 	for (i = 2; i <= bitmap_n * 8; i++)	
 		if (handle->datas[i]) {
-            ret = to_8583data(handle, i, data + packed_size, &left_size);
+			ret = to_8583data(handle, i, data + packed_size, &left_size);
 			if (ISO8583_OK != ret)
 				return ret;
 	
