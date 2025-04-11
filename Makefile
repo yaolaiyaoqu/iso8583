@@ -15,9 +15,7 @@ CFLAGS =  -O3 -Wall -pedantic -DNDEBUG -g
 
 CISO8583_CFLAGS =      -fpic
 CISO8583_LDFLAGS =     -shared 
-LUA_INCLUDE_DIR ?= $(PREFIX)/include
 LUA_LIB_DIR ?=     $(PREFIX)/lib/lua/$(LUA_VERSION)
-LUA_INCLUDE_DIR ?= $(PREFIX)/include
 LUA_CMODULE_DIR ?= $(PREFIX)/lib/lua/$(LUA_VERSION)
 LUA_MODULE_DIR ?=  $(PREFIX)/share/lua/$(LUA_VERSION)
 LUA_BIN_DIR ?=     $(PREFIX)/bin

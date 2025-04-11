@@ -83,6 +83,8 @@ The fields is an array of lua tables holding the following keys:
 
     U or Z, Z means BCD data, U means BIN data.
 
+The default definition of fields is in [iso8583.c](iso8583.c#L57).
+
 [Back to TOC](#table-of-contents)
 
 ### Pack
