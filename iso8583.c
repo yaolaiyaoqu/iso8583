@@ -45,7 +45,7 @@
 		snprintf(handle->error, ISO8583_ERROR_SIZE, "function %s: field0 error! the data of field 0 must be exist!", __func__); \
 		return ISO8583_EFIELD0; \
 	} \
-} while (0) 
+} while (0)
 
 #define CHK_PAD(handle, pad, compress) do {\
 	if (compress && (hex_to_bin(pad) == -1)) { \
@@ -57,22 +57,22 @@
 static struct iso8583_field default_fields[129] = {
 	{   4, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 0.   Message Type             n    4						
 	{   1, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 1.   BIT MAP EXTENDED         b    1						
-	{  19, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 2.   PRIMARY ACC. NUM         n    19   llvar				  
+	{  19, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 2.   PRIMARY ACC. NUM         n    19   llvar
 	{   6, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 3.   PROCESSING CODE          n    6						
 	{  12, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 4.   AMOUNT, TRANS.           n    12						
 	{  12, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 5.   AMOUNT, SETTLEMENT       n    12						
 	{  12, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 6.   AMOUNT,CardHolder bill   n    12						
-	{  10, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 7.   TRANSMISSION D & T       n    10   mmddhhmmss			 
+	{  10, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 7.   TRANSMISSION D & T       n    10   mmddhhmmss
 	{   8, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 8.   AMN., CH BILLING FEE     n    8						
 	{   8, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 9.   CONV RATE,SET'T          n    8						
 	{   8, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 10.  CONV RATE, CH billing    n    8						
 	{   6, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 11.  SYSTEM TRACE #           n    6						
-	{   6, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 12.  TIME, LOCAL TRAN         n    6    hhmmss				 
-	{   4, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 13.  DATE, LOCAL TRAN         n    4    mmdd				   
-	{   4, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 14.  DATE, EXPIRATION         n    4    yymm				   
-	{   4, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 15.  DATE, SETTLEMENT         n    4    mmdd				   
-	{   4, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 16.  DATE, CONVERSION         n    4    mmdd				   
-	{   4, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 17.  DATE, CAPTURE            n    4    mmdd				   
+	{   6, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 12.  TIME, LOCAL TRAN         n    6    hhmmss
+	{   4, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 13.  DATE, LOCAL TRAN         n    4    mmdd	
+	{   4, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 14.  DATE, EXPIRATION         n    4    yymm		
+	{   4, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 15.  DATE, SETTLEMENT         n    4    mmdd	
+	{   4, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 16.  DATE, CONVERSION         n    4    mmdd
+	{   4, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 17.  DATE, CAPTURE            n    4    mmdd	
 	{   4, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 18.  MERCHANT'S TYPE          n    4						
 	{   3, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 19.  AI COUNTRY CODE          n    3						
 	{   3, 'F', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 20.  PAN EXT.,CO'Y CODE       n    3						
@@ -87,11 +87,11 @@ static struct iso8583_field default_fields[129] = {
 	{   8, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 29.  AMT. SETT.  FEE          n    8						
 	{   8, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 30.  AMT. TRAN PROC FEE       n    8						
 	{   8, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 31.  AMT. SET PROC FEE        n    8						
-	{  11, '0', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 32.  ACOUIR. INST. ID         n    11   llvar				  
-	{  11, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 33.  FI ID                    n    11   llvar				  
-	{  11, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 34.  PAN EXTENDED             n    8    llvar				  
-	{  37, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 35.  TRACK 2 DATA             z    37   llvar				  
-	{ 104, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 36.  TRACK 3 DATA             z    104  lllvar				 
+	{  11, '0', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 32.  ACOUIR. INST. ID         n    11   llvar
+	{  11, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 33.  FI ID                    n    11   llvar
+	{  11, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 34.  PAN EXTENDED             n    8    llvar
+	{  37, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 35.  TRACK 2 DATA             z    37   llvar
+	{ 104, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 36.  TRACK 3 DATA             z    104  lllvar
 	{  12, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 37.  RETR. REF. NUM           an   12						
 	{   6, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 38.  AUTH. ID. RESP           an   6						
 	{   2, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 39.  RESPONSE CODE            an   2						
@@ -99,91 +99,91 @@ static struct iso8583_field default_fields[129] = {
 	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 41.  TERMINAL ID              ans  8						
 	{  15, 'F', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 42.  CARD ACC. ID             ans  15						
 	{  40, ' ', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 43.  CARD ACC. NAME           ans  40						
-	{  25, '0', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 44.  ADD. RESP DATA           an   25   llvar				  
-	{  76, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 45.  TRACK 1 DATA             an   76   llvar				  
-	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 46.  ADD. DATA - ISO          an   999  lllvar				 
-	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 47.  ADD. DATA - NATI.        an   999  lllvar					  
-	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 48.  ADD. DATA - PRI.         an   999  lllvar				 
+	{  25, '0', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 44.  ADD. RESP DATA           an   25   llvar
+	{  76, 'F', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 45.  TRACK 1 DATA             an   76   llvar
+	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 46.  ADD. DATA - ISO          an   999  lllvar
+	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 47.  ADD. DATA - NATI.        an   999  lllvar
+	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 48.  ADD. DATA - PRI.         an   999  lllvar
 	{   3, ' ', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 49.  CC, TRANSACTION          a    3						
 	{   3, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 50.  CC, SETTLEMENT           an   3						
-	{   3, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 51.  CC, CH. BILLING          a    3					   
+	{   3, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 51.  CC, CH. BILLING          a    3
 	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 52.  PIN DATA                 b    8						
 	{  16, '0', ISO8583_FIX     , ISO8583_R, ISO8583_U },   // 53.  SECU. CONT. INFO.        n    16						
-	{ 120, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 54.  ADDITIONAL AMTS          an   120  lllvar			 
-	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 55.  REVERVED ISO             ans  999  lllvar				 
-	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 56.  REVERVED ISO             ans  999  lllvar				 
-	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 57.  REVERVED NATIONAL        ans  999  lllvar				 
-	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 58.  REVERVED NATIONAL        ans  999  lllvar				 
+	{ 120, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 54.  ADDITIONAL AMTS          an   120  lllvar
+	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 55.  REVERVED ISO             ans  999  lllvar
+	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 56.  REVERVED ISO             ans  999  lllvar
+	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 57.  REVERVED NATIONAL        ans  999  lllvar
+	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 58.  REVERVED NATIONAL        ans  999  lllvar
 	{ 999, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 59.  REVERVED NATIONAL        ans  999  lllvar
-	{ 100, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 60.  RESERVED - PRIV1         ans  999  lllvar				 
-	{ 200, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 61.  RESERVED - PRIV2         ans  999  lllvar				 
-	{ 200, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 62.  RESERVED - PRIV2         ans  999  lllvar				 
-	{ 200, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 63.  RESERVED - PRIV3         ans  999  lllvar				 
-	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 64.  MSG. AUTH. CODE          b    8						
-	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 65.  BIT MAP, EXTENDED        b    8						
-	{   1, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 66.  SETTLEMENT CODE          n    1						
-	{   2, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 67.  EXT. PAYMENT CODE        n    2						
-	{   3, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 68.  RECE. INST. CN.          n    3						
-	{   3, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 69.  SETTLEMENT ICN.          n    3						
-	{   3, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 70.  NET MAN IC               n    3						
-	{   4, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 71.  MESSAGE NUMBER           n    4						
-	{   4, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 72.  MESSAGE NUM. LAST        n    4						
-	{   6, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 73.  DATE, ACTION             n    6    yymmdd				 
-	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 74.  CREDIT NUMBER            n    10						
-	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 75.  CRED REVERSAL NUM        n    10						
-	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 76.  DEBITS NUMBER            n    10						
-	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 77.  DEBT REVERSAL NUM        n    10						
-	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 78.  TRANSFER NUMBER          n    10						
-	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 79.  TRANS REVERSAL NUM       n    10						
-	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 80.  INQUERIES NUMBER         n    10						
-	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 81.  AUTHORIZE NUMBER         n    10						
-	{  12, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 82.  CRED.PROC.FEE.AMT        n    12						
-	{  12, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 83.  CRED.TRANS.FEE.AMT       n    12						
-	{  12, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 84.  DEBT.PROC.FEE.AMT        n    12						
-	{  12, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 85.  DEBT.TRANS.FEE.AMT       n    12						
-	{  15, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 86.  CRED AMT                 n    16						
-	{  15, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 87.  CRED REVERSAL AMT        n    16						
-	{  15, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 88.  DEBIT AMT                n    16						
-	{  15, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 89.  DEBIT REVERSAL AMT       n    16						
-	{  42, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 90.  ORIGIN DATA ELEMNT       n    42						
-	{   1, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 91.  FILE UPDATE CODE         an   1						
-	{   2, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 92.  FILE SECURITY CODE       n    2						
-	{   5, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 93.  RESPONSE INDICATOR       n    5						
-	{   7, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 94.  SERVICE INDICATOR        an   7						
-	{  42, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 95.  REPLACEMENT AMOUNT       an   42						
-	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 96.  MESSAGE SECUR CODE       an   8						
-	{  16, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 97.  AMT.NET SETTLEMENT       n    16						
-	{  25, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 98.  PAYEE                    ans  25						
-	{  11, 'D', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 99.  SETTLE.INST.IC           n    11   llvar				 
-	{  11, 'D', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 100. RECE.INST.IC             n    11   llvar				  
-	{  17, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 101. FILE NAME                ans  17						
-	{  28, 'D', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 102. ACCOUNT ID 1             ans  28   llvar				  
-	{  28, 'D', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 103. ACCOUNT ID 2             ans  28   llvar				  
-	{ 100, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 104. TRANS.DESCRIPTION        ans  100  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 105. RESERVED FOR ISO         ans  999  lllvar  
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 106. RESERVED FOR ISO         ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 107. RESERVED FOR ISO         ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 108. RESERVED FOR ISO         ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 109. RESERVED FOR ISO         ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 110. RESERVED FOR ISO         ns   999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 111. RESERVED FOR ISO         ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 112. RESERVED FOR NATIO       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 113. RESERVED FOR NATIO       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 114. RESERVED FOR NATIO       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 115. RESERVED FOR NATIO       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 116. RESERVED FOR NATIO       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 117. RESERVED FOR NATIO       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 118. RESERVED FOR NATIO       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 119. RESERVED FOR NATIO       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 120. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 121. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 122. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 123. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 124. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 125. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 126. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 127. RESERVED FOR PRIVA       ans  999  lllvar				 
-	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U }    // 128. RESERVED FOR PRIVA       ans  999  lllvar				 
+	{ 100, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 60.  RESERVED - PRIV1         ans  999  lllvar
+	{ 200, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 61.  RESERVED - PRIV2         ans  999  lllvar
+	{ 200, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 62.  RESERVED - PRIV2         ans  999  lllvar
+	{ 200, 'F', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 63.  RESERVED - PRIV3         ans  999  lllvar
+	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 64.  MSG. AUTH. CODE          b    8
+	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 65.  BIT MAP, EXTENDED        b    8
+	{   1, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 66.  SETTLEMENT CODE          n    1
+	{   2, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 67.  EXT. PAYMENT CODE        n    2
+	{   3, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 68.  RECE. INST. CN.          n    3
+	{   3, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 69.  SETTLEMENT ICN.          n    3
+	{   3, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 70.  NET MAN IC               n    3
+	{   4, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 71.  MESSAGE NUMBER           n    4
+	{   4, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 72.  MESSAGE NUM. LAST        n    4
+	{   6, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 73.  DATE, ACTION             n    6    yymmdd				
+	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 74.  CREDIT NUMBER            n    10
+	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 75.  CRED REVERSAL NUM        n    10
+	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 76.  DEBITS NUMBER            n    10
+	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 77.  DEBT REVERSAL NUM        n    10
+	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 78.  TRANSFER NUMBER          n    10
+	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 79.  TRANS REVERSAL NUM       n    10
+	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 80.  INQUERIES NUMBER         n    10
+	{  10, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 81.  AUTHORIZE NUMBER         n    10
+	{  12, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 82.  CRED.PROC.FEE.AMT        n    12
+	{  12, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 83.  CRED.TRANS.FEE.AMT       n    12
+	{  12, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 84.  DEBT.PROC.FEE.AMT        n    12
+	{  12, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 85.  DEBT.TRANS.FEE.AMT       n    12
+	{  15, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 86.  CRED AMT                 n    16
+	{  15, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 87.  CRED REVERSAL AMT        n    16
+	{  15, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 88.  DEBIT AMT                n    16
+	{  15, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 89.  DEBIT REVERSAL AMT       n    16
+	{  42, '0', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 90.  ORIGIN DATA ELEMNT       n    42
+	{   1, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 91.  FILE UPDATE CODE         an   1	
+	{   2, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 92.  FILE SECURITY CODE       n    2	
+	{   5, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 93.  RESPONSE INDICATOR       n    5	
+	{   7, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 94.  SERVICE INDICATOR        an   7	
+	{  42, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 95.  REPLACEMENT AMOUNT       an   42
+	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 96.  MESSAGE SECUR CODE       an   8	
+	{  16, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 97.  AMT.NET SETTLEMENT       n    16
+	{  25, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 98.  PAYEE                    ans  25
+	{  11, 'D', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 99.  SETTLE.INST.IC           n    11   llvar
+	{  11, 'D', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 100. RECE.INST.IC             n    11   llvar
+	{  17, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U },   // 101. FILE NAME                ans  17
+	{  28, 'D', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 102. ACCOUNT ID 1             ans  28   llvar	
+	{  28, 'D', ISO8583_LLVAR_U , ISO8583_L, ISO8583_U },   // 103. ACCOUNT ID 2             ans  28   llvar	
+	{ 100, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 104. TRANS.DESCRIPTION        ans  100  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 105. RESERVED FOR ISO         ans  999  lllvar
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 106. RESERVED FOR ISO         ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 107. RESERVED FOR ISO         ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 108. RESERVED FOR ISO         ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 109. RESERVED FOR ISO         ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 110. RESERVED FOR ISO         ns   999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 111. RESERVED FOR ISO         ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 112. RESERVED FOR NATIO       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 113. RESERVED FOR NATIO       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 114. RESERVED FOR NATIO       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 115. RESERVED FOR NATIO       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 116. RESERVED FOR NATIO       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 117. RESERVED FOR NATIO       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 118. RESERVED FOR NATIO       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 119. RESERVED FOR NATIO       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 120. RESERVED FOR PRIVA       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 121. RESERVED FOR PRIVA       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 122. RESERVED FOR PRIVA       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 123. RESERVED FOR PRIVA       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 124. RESERVED FOR PRIVA       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 125. RESERVED FOR PRIVA       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 126. RESERVED FOR PRIVA       ans  999  lllvar	
+	{ 999, 'D', ISO8583_LLLVAR_U, ISO8583_L, ISO8583_U },   // 127. RESERVED FOR PRIVA       ans  999  lllvar	
+	{   8, 'D', ISO8583_FIX     , ISO8583_L, ISO8583_U }    // 128. RESERVED FOR PRIVA       ans  999  lllvar	
 };
 
 static inline unsigned bcd2bin(unsigned char val)
@@ -202,7 +202,7 @@ static inline unsigned asc2bin(unsigned char *val, int len)
 	unsigned int res = 0;
 	for (int i=0; i<len; i++){
 	    res = res * 10 + *p - '0';
-    	    p++;
+	    p++;
 	}
 	return res;
 }
@@ -243,12 +243,12 @@ static inline int correct_size(unsigned int *size, unsigned int type, unsigned i
 		break;
 	default:
 		return ISO8583_ETYPE;
-	}   
+	}
 
 	return ISO8583_OK;
 }
 
-static inline int get_8583size_from_userdata(unsigned int *iso8583_size, unsigned int user_size, 
+static inline int get_8583size_from_userdata(unsigned int *iso8583_size, unsigned int user_size,
 						unsigned int type, unsigned int fix_size, unsigned int compress)
 {
 
@@ -260,7 +260,7 @@ static inline int get_8583size_from_userdata(unsigned int *iso8583_size, unsigne
 		*iso8583_size = (compress ? (user_size + 1) / 2 : user_size) + 1;
 		break;
 	case ISO8583_LLLVAR:
-		*iso8583_size = (compress ? (user_size + 1) / 2 : user_size) + 2; 
+		*iso8583_size = (compress ? (user_size + 1) / 2 : user_size) + 2;
 		break;
 	case ISO8583_LLVAR_U:
 		*iso8583_size = (compress ? (user_size + 1) / 2 : user_size) + 2;
@@ -276,7 +276,7 @@ static inline int get_8583size_from_userdata(unsigned int *iso8583_size, unsigne
 }
 
 static inline int str_compress_pad(unsigned char *dst, unsigned int dst_size,
-					unsigned char *src, unsigned int src_size, 
+					unsigned char *src, unsigned int src_size,
 					unsigned int align, char pad)
 {
 	int i;
@@ -297,7 +297,7 @@ static inline int str_compress_pad(unsigned char *dst, unsigned int dst_size,
 		if ((bit4 = hex_to_bin(pad)) == -1)
 			return ISO8583_EHEXTOBIN;
 
-		if (src_size % 2) 
+		if (src_size % 2)
 			dst[src_size / 2] |= bit4;
 
 		if ((src_size + 1) / 2 < dst_size) {
@@ -335,7 +335,7 @@ static inline int str_compress_pad(unsigned char *dst, unsigned int dst_size,
 }
 
 static inline int str_pad(unsigned char *dst, unsigned int dst_size,
-				unsigned char *src, unsigned int src_size, 
+				unsigned char *src, unsigned int src_size,
 				unsigned int align, char pad)
 {
 	int i;
@@ -359,8 +359,8 @@ static inline int str_pad(unsigned char *dst, unsigned int dst_size,
 	return ISO8583_OK;
 }
 
-static inline int to_fix_8583data(unsigned char *iso8583_data, unsigned int iso8583_size, 
-					unsigned char *user_data, unsigned int user_size, 
+static inline int to_fix_8583data(unsigned char *iso8583_data, unsigned int iso8583_size,
+					unsigned char *user_data, unsigned int user_size,
 					unsigned int align, char pad, unsigned int compress)
 {
 	if (compress)
@@ -371,23 +371,23 @@ static inline int to_fix_8583data(unsigned char *iso8583_data, unsigned int iso8
 
 static inline int to_var_8583data(unsigned char *iso8583_data, unsigned int iso8583_size,
 					unsigned char *user_data, unsigned int user_size,
-					unsigned int align, char pad, unsigned int compress, 
+					unsigned int align, char pad, unsigned int compress,
 					unsigned int prefixlen, unsigned int prefixcompress)
 {
 	int i;
 	unsigned int size = user_size;
 
-        if ( prefixcompress ) {
-	    for (i = 0; i < prefixlen; i++) {
-		iso8583_data[prefixlen - 1 - i] = bin2bcd(size % 100);
-		size /= 100;   
-	    }
+	if ( prefixcompress ) {
+		for (i = 0; i < prefixlen; i++) {
+			iso8583_data[prefixlen - 1 - i] = bin2bcd(size % 100);
+			size /= 100;
+		}
 	} else {
-	    for (i = 0; i < prefixlen; i++) {
-		iso8583_data[prefixlen - 1 - i] = size % 10 + '0';
-		size /= 10;   
-	    }
-        }
+		for (i = 0; i < prefixlen; i++) {
+			iso8583_data[prefixlen - 1 - i] = size % 10 + '0';
+			size /= 10;
+		}
+	}
 
 	return to_fix_8583data(iso8583_data + prefixlen, iso8583_size - prefixlen, user_data, user_size, align, pad, compress);
 }
@@ -421,7 +421,7 @@ static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsign
 	}
 
 	if (iso8583_size > *size) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, 
+		snprintf(handle->error, ISO8583_ERROR_SIZE,
 			"to_8583data() error! not enough size! index = %d, size = %u, iso8583_size = %u!", index, *size, iso8583_size);
 		return ISO8583_ESIZE;
 	}
@@ -446,7 +446,7 @@ static inline int to_8583data(struct iso8583 *handle, unsigned int index, unsign
 	}
 
 	if (ret != ISO8583_OK) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, 
+		snprintf(handle->error, ISO8583_ERROR_SIZE,
 			"to_8583data() error! convert to 8583data failed! index = %d, size = %u, iso8583_size = %u!", index, *size, iso8583_size);
 		return ret;
 	}
@@ -481,7 +481,7 @@ static inline int get_size_from_8583data(unsigned int *iso8583_size, unsigned in
 		if (data_size < 2)	
 			return ISO8583_ESIZE;
 
- 	        l = bcd2bin(iso8583_data[0]) * 100 + bcd2bin(iso8583_data[1]);
+		l = bcd2bin(iso8583_data[0]) * 100 + bcd2bin(iso8583_data[1]);
 		*iso8583_size = (compress ? (l + 1) / 2 : l) + 2;
 		*user_size = l;	
 		break;
@@ -500,11 +500,11 @@ static inline int get_size_from_8583data(unsigned int *iso8583_size, unsigned in
 		l = asc2bin(iso8583_data, 3);
 		*iso8583_size = compress ? (l + 1) / 2 + 3 : l + 3;
 		*user_size = l;	
-                break;
+		break;
 	default:
 		return ISO8583_ETYPE;
 	}
-	if (*iso8583_size > data_size) 
+	if (*iso8583_size > data_size)
 		return ISO8583_ESIZE;	
 
 	return ISO8583_OK;
@@ -545,8 +545,8 @@ static inline int to_hex_from_left(unsigned char *data, unsigned char *bin, unsi
 	return ISO8583_OK;
 }
 
-static inline int to_userdata_fix(unsigned char *user_data, unsigned char *iso8583_data, 
-					unsigned int iso8583_size, unsigned int user_size, 
+static inline int to_userdata_fix(unsigned char *user_data, unsigned char *iso8583_data,
+					unsigned int iso8583_size, unsigned int user_size,
 					unsigned int compress, unsigned int align)
 {
 	if (compress) {
@@ -570,8 +570,8 @@ static inline int to_userdata(struct iso8583 *handle, unsigned int index, unsign
 	int ret = get_size_from_8583data(&iso8583_size, &user_size, data, *size, field->compress, field->type, field->size);
 
 	if (ret != ISO8583_OK) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, 
-			"to_userdata() error! get_size_from_8583 data error! index = %u, compress = %u, type = %u, field->size = %u, size = %u", 
+		snprintf(handle->error, ISO8583_ERROR_SIZE,
+			"to_userdata() error! get_size_from_8583 data error! index = %u, compress = %u, type = %u, field->size = %u, size = %u",
 			index, field->compress, field->type, field->size, *size);
 		return ret;
 	}
@@ -700,7 +700,7 @@ int iso8583_set(struct iso8583 *handle, unsigned int index, const unsigned char 
 			handle->datas[index] = NULL;
 		}
 		return ISO8583_OK;
-  	} 
+	}
 
 	field = handle->fields[index] ? handle->fields[index] : &default_fields[index];
 
@@ -777,7 +777,7 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	left_size = *size - packed_size;
 
 	if (left_size < 8) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, 
+		snprintf(handle->error, ISO8583_ERROR_SIZE,
 			"iso8583_pack() error! no enough size to pack bitmap! left_size = %u, left_size < 8!", left_size);
 		return ISO8583_ESIZE;
 	}
@@ -795,7 +795,7 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	}
 
 	if (left_size < bitmap_n) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, 
+		snprintf(handle->error, ISO8583_ERROR_SIZE,
 			"iso8583_pack() error! no enough size to pack bitmap! left_size = %u, bitmap_n = %u!", left_size, bitmap_n);
 		return ISO8583_ESIZE;
 	}
@@ -835,7 +835,7 @@ int iso8583_size(struct iso8583 *handle, unsigned int *size)
 	ret = to_8583data(handle, 0, NULL, &data_size);
 
 	if (ISO8583_OK != ret)
-        	return ret;
+		return ret;
 
 	*size += data_size;
 
@@ -879,7 +879,7 @@ int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *si
 	left_size = *size - unpacked_size;
 
 	if (left_size < 8) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, 
+		snprintf(handle->error, ISO8583_ERROR_SIZE,
 			"iso8583_unpack() error! no enough size to pack bitmap! left_size = %u, left_size < 8!", left_size);
 		return ISO8583_FAILED;
 	}
@@ -895,7 +895,7 @@ int iso8583_unpack(struct iso8583 *handle, unsigned char *data, unsigned int *si
 	}
 
 	if (left_size < bitmap_n) {
-		snprintf(handle->error, ISO8583_ERROR_SIZE, 
+		snprintf(handle->error, ISO8583_ERROR_SIZE,
 			"iso8583_pack() error! no enough size to pack bitmap! left_size = %u, bitmap_n = %u!", left_size, bitmap_n);
 		return ISO8583_FAILED;
 	}
@@ -921,7 +921,7 @@ int iso8583_clear_datas(struct iso8583 *handle)
 {
 	unsigned int i;
 
-	for (i = 0; i < 129; i++) 
+	for (i = 0; i < 129; i++)
 		if (handle->datas[i]) {
 			free(handle->datas[i]->data);
 			free(handle->datas[i]);
