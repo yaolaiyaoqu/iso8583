@@ -239,7 +239,7 @@ static inline int correct_size(unsigned int *size, unsigned int type, unsigned i
 		break;
 	case ISO8583_LLLVAR:
 	case ISO8583_LLLVAR_U:
-		*size = (*size > 9999) ? 9999 : *size;
+		*size = (*size > 999) ? 999 : *size;
 		break;
 	default:
 		return ISO8583_ETYPE;
