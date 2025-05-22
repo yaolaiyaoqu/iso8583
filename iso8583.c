@@ -633,12 +633,12 @@ static inline unsigned int bitmap_get_bit(unsigned char *data, unsigned int inde
 	return data[i] & (1 << (7 - j)) ? 1 : 0;
 }
 
-static inline void bitmap_set_bit(unsigned char *data, unsigned int index, unsigned int value)
+static inline void bitmap_set_bit(unsigned char *data, unsigned int index)
 {
 	int i = (index - 1) / 8;
 	int j = (index - 1) % 8;
 
-	data[i] |= (value ? 1 : 0) << (7 - j);
+	data[i] |= 1 << (7 - j);
 }
 
 struct iso8583 *iso8583_create()
@@ -787,11 +787,10 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 	if (handle->datas[1] != NULL && handle->datas[1]->data[0] == '1') {
 		bitmap_n = 16;	
 		memset(bitmap, 0, bitmap_n);
-		bitmap_set_bit(bitmap, 1, 1);
+		bitmap_set_bit(bitmap, 1);
 	} else {
 		bitmap_n = 8;
 		memset(bitmap, 0, bitmap_n);
-		bitmap_set_bit(bitmap, 1, 0);
 	}
 
 	if (left_size < bitmap_n) {
@@ -812,7 +811,7 @@ int iso8583_pack(struct iso8583 *handle, unsigned char *data, unsigned int *size
 			packed_size += left_size;
 			left_size = *size - packed_size;
 
-			bitmap_set_bit(bitmap, i, 1);
+			bitmap_set_bit(bitmap, i);
 		}
 
 	*size = packed_size;
