@@ -93,6 +93,12 @@ The default definition of fields is in [iso8583.c](iso8583.c#L57).
 
 Pack iso8583 data to message. In case of failures, returns `nil` and a string describing the error.
 
+The parameter data is an array that stores ISO8583 data, where the value of data[1] is either "0" or "1".
+
+* "0" means **bitmap64** is used.
+
+* "1" means **bitmap128** is used.
+
 [Back to TOC](#table-of-contents)
 
 ### Unpack
